@@ -8,10 +8,9 @@ if __name__ == "__main__":
     # speed difference to get same count on left and right odo
     spdl = 0
     spdr = 0
-    mybot.set_speed (spdl, spdr)
-    time.sleep (0.05)
+    mybot.set_speed(spdl, spdr)
+    time.sleep(0.05)
 
-    print ("Battery Voltage : %.2f V"%(mybot.encoders.battery_voltage()))
+    print("Battery Voltage : %.2f V" % (mybot.encoders.battery_voltage()))
    
-    mybot.end() # clean end of the robot mission
-
+    mybot.end()  # clean end of the robot mission
