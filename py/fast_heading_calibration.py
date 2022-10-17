@@ -21,7 +21,7 @@ if __name__ == "__main__":
     
     accel_filter_mode = 2
     mybot.imu.setup_accel_filter(accel_filter_mode)
-    
+
     mag = mybot.imu.read_mag_raw()
     magx_min = mag[0]
     magx_max = mag[0]
