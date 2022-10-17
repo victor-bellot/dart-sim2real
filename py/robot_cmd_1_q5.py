@@ -1,29 +1,30 @@
-import dartv2b
+from dartv2b import DartV2
 import time
 
 if __name__ == "__main__":
-    mybot = dartv2b.DartV2()
+    my_bot = DartV2()
 
     # place your work here
-    print ("Front encoders before : ",mybot.get_front_encoders())
+    print("Front encoders before : ", my_bot.get_front_encoders())
 
     for ileg in range(2):
-        mybot.set_speed (100, 100)
+        my_bot.set_speed(100, 100)
         for i in range(10):
-            print ("Front encoders [L,R]",mybot.get_front_encoders())
+            print("Front encoders [L,R]", my_bot.get_front_encoders())
             time.sleep(0.5)
-        mybot.set_speed (100, -100)
-        time.sleep(1.31) # empirical !! may change with cpu !!! 
-        mybot.set_speed (0,0)
+        my_bot.set_speed(100, -100)
+        time.sleep(1.31)  # empirical !! may change with cpu !!!
+        my_bot.set_speed(0, 0)
 
-    odo_left,odo_right = mybot.get_front_encoders()
+    odo_left, odo_right = my_bot.get_front_encoders()
     
-    print ("Front encoders after : ",[odo_left,odo_right])
-    deltaOdoLeft = mybot.delta_front_odometers(side="left")
-    deltaOdoRight = mybot.delta_front_odometers(side="right")
-    print ("Delta odometer left :", deltaOdoLeft)
-    print ("Delta odometer right :", deltaOdoRight)
-    print ("Delta odometers :",mybot.delta_front_odometers())
-    
-    mybot.end() # clean end of the robot mission
+    print("Front encoders after : ", [odo_left, odo_right])
 
+    deltaOdoLeft = my_bot.delta_front_odometers(side="left")
+    deltaOdoRight = my_bot.delta_front_odometers(side="right")
+
+    print("Delta odometer left :", deltaOdoLeft)
+    print("Delta odometer right :", deltaOdoRight)
+    print("Delta odometers :", my_bot.delta_front_odometers())
+    
+    my_bot.end()  # clean end of the robot mission

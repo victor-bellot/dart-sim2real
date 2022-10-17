@@ -106,7 +106,6 @@ class TrexIO():
     __I2C_SLAVE=0x0703
     __I2C_TENBIT=0x0704
 
-
     def __init__(self, bus_nb = 2, addr = 0x07, sim=False):
         self.__sim = sim
         if self.__sim:
@@ -243,14 +242,14 @@ if __name__ == "__main__":
     except:
         duration = 1.0 
     print("Testing motors")
-    trex = TrexIO()
+    trex = TrexIO(sim=True)
     print(trex.status)
     time.sleep(1e-3)
     trex.command["left_motor_speed"] = val_left
-    trex.command["right_motor_speed"]= val_right
+    trex.command["right_motor_speed"] = val_right
     trex.i2c_write()
     time.sleep(duration)
-    trex.command["left_motor_speed"]= 0
-    trex.command["right_motor_speed"]= 0
+    trex.command["left_motor_speed"] = 0
+    trex.command["right_motor_speed"] = 0
     trex.i2c_write()
     print(trex.status)

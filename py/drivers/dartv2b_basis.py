@@ -466,13 +466,13 @@ class DartV2Basis():
             #print ("status",status)
             encFrontLeft = status["left_encoder"]
             encFrontRight = status["right_encoder"]
-        return [encFrontLeft,encFrontRight]
+        return [encFrontLeft, encFrontRight]
 
-    def update_front_encoders(self,t,odofl,odofr):
+    def update_front_encoders(self, t, odofl, odofr):
         # refresh encoders current and memory values    
         self.encoders_front_acq_time = t
-        self.encoders_front_left_mem  = self.encoders_front_left_last
-        self.encoders_front_right_mem  = self.encoders_front_right_last
+        self.encoders_front_left_mem = self.encoders_front_left_last
+        self.encoders_front_right_mem = self.encoders_front_right_last
         self.encoders_front_left_last = odofl
         self.encoders_front_right_last = odofr
         

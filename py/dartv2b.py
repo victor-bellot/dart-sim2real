@@ -37,7 +37,7 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         Read from T-REX (xx ticks per revolution)
         return : odometer values (left and right) on 16 bits signed (-32768 to - 32767)
         """
-        odofl,odofr = self.get_front_encoders()
+        odofl, odofr = self.get_front_encoders()
         self.update_front_encoders(time.time(), odofl, odofr)
         return odofl, odofr
             
@@ -55,14 +55,14 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         return odorl, odorr
     
     def delta_odometers_without_jumps (self, odo_mem, odo_last):
-        deltaOdo = odo_last - odo_mem
+        deltaOdo = odo_last - odo_mem  # last=new and mem=old
         if deltaOdo > 32767:  # check if high positive jumps !!
             deltaOdo -= 65536  # remove the jump (2^16)
         if deltaOdo < -32767:  # same for high negative jumps
             deltaOdo += 65536  # remove the jump (2^16)
         return deltaOdo
 
-    def delta_front_odometers(self,side="both"):
+    def delta_front_odometers(self, side="both"):
         if side == "both":
             deltaOdoLeft = self.delta_odometers_without_jumps(
                 self.encoders_front_left_mem, self.encoders_front_left_last)

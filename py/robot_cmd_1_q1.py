@@ -1,13 +1,12 @@
-import dartv2b
+from dartv2b import DartV2
 import time
 
 if __name__ == "__main__":
-    mybot = dartv2b.DartV2()
+    my_bot = DartV2()
 
     # place your work here
-    mybot.set_speed(100, -100)
+    my_bot.set_speed(100, -100)
     time.sleep(2.0)
-    mybot.set_speed(0, 0)
+    my_bot.set_speed(0, 0)
     
-    mybot.end()  # clean end of the robot mission
-
+    my_bot.end()  # clean end of the robot mission
