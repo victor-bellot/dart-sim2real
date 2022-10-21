@@ -48,7 +48,7 @@ Try GitLab (push/pull/commit)
  
 ### Seance 2:
 
-We have made the question 1 to 5. The program have been already written but we have made some changes, correct some issues.
+We have made the question 1 to 5. The program have been already written but we have made some changes, correct some issues. We push it on a development branch
 
 Try to install Unbuntu on the second one with the help of M. Le-Bars. It conclude to the fact that we need to make some save of the computer before 
 continuing.
