@@ -46,18 +46,22 @@ Lunching program of the first questions to try V-REP. It works on one computer b
 
 Try GitLab (push/pull/commit)
  
-### Sceance 2:
+### Seance 2:
 
 We have made the question 1 to 5. The program have been already written but we have made some changes, correct some issues.
 
 Try to install Unbuntu on the second one with the help of M. Le-Bars. It conclude to the fact that we need to make some save of the computer before 
 continuing.
 
-### Sceance 3:
+### Seance 3:
 
-Continuing questions, we have made questions 6 to 9
+Continuing questions, we have made questions 6 and 7
 
 Edit the README
 
-### Sceance 4:
+### Between Sceances:
+
+Continuing questions
+
+### Seance 4:
 
