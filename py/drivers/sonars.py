@@ -3,7 +3,8 @@ import sys
 import os
 import platform
 
-class SonarsIO ():
+
+class SonarsIO():
     def __init__(self,sim=False,vsv=None):
         self.__sim = sim
         if self.__sim:
