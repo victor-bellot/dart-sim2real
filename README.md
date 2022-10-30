@@ -24,22 +24,22 @@
 
 ### Travail effectué
 * Sceance 1:
-** Creation of the groupe DART-BP with BELLOT victor and PILON Martin.
-** Creation of a GitLab
-** Instalation of V-REP
-** Lunching program of the first questions to try V-REP. It works on one computer but not the second one. 
-** Try GitLab (push/pull/commit)
+    * Creation of the groupe DART-BP with BELLOT victor and PILON Martin.
+    * Creation of a GitLab
+    * Instalation of V-REP
+    * Lunching program of the first questions to try V-REP. It works on one computer but not the second one. 
+    * Try GitLab (push/pull/commit)
 
 * Seance 2:
-** We have made the question 1 to 5. The program have been already written but we have made some changes, correct some issues. We push it on a development branch
-** Try to install Unbuntu on the second one with the help of M. Le-Bars. It conclude to the fact that we need to make some save of the computer before continuing.
+    * We have made the question 1 to 5. The program have been already written but we have made some changes, correct some issues. We push it on a development branch
+    * Try to install Unbuntu on the second one with the help of M. Le-Bars. It conclude to the fact that we need to make some save of the computer before continuing.
 
 * Seance 3:
-** Continuing questions, we have made questions 6 and 7
-** Edit the README
+    * Continuing questions, we have made questions 6 and 7
+    * Edit the README
 
 * Between Sceances:
-** Continuing questions
+    * Continuing questions
 
 ### Travail en cours
 => Présenter de manière synthétique et globale le travail en cours (Vous êtes libre sur la forme et le contenu)
