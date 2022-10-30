@@ -5,10 +5,11 @@
 - PILON Martin <martin.pilon@ensta-bretagne.org> (Promotion ENSTA Bretagne 2024 - Spécialité Robotique Autonome)
 
 ## Description
-=> Décrire l'objectif de la matière et les compétences à acquérir (Vous êtes libre sur la forme et le contenu)
+Avec ce projet, nous découvrons la collaboration avec GitLab ainsi que l'utilisation de la librairie Python DARTv2.
+Nous allons ensuite expérimenter le passage de la commande d'un robot dans une simulation à celle dans un circuit réel.
 
 ## Remarque(s)
-=> Vous pouvez ajouter ici des remarques perso (ex: telle partie fonctionnelle mais à améliorer) ou des commentaires généraux sur votre travail (Vous êtes libre sur la forme et le contenu)
+(Le copier-coller était juste pour avoir la forme en tête. Désolé Damien!)
 
 ## Sommaire
 => Faire un sommaire avec des balises (cf tutoriel 3)
@@ -23,6 +24,7 @@
 => Donner des informations sur l'avancement du projet (en cours, 60%, terminé, ...) (Vous êtes libre sur la forme et le contenu)
 
 ### Travail effectué
+
 * Sceance 1:
     * Creation of the groupe DART-BP with BELLOT victor and PILON Martin.
     * Creation of a GitLab
