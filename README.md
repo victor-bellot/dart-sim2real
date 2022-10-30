@@ -1,67 +1,59 @@
-# DartV2 Challenge 2021
+(Title1) DartV3 Challenge 2022 - Groupe {DART-BP} 
 
-## DartV2 - Lab1 - Part 3 - Low Level Control
+    (Title3) Auteurs
+        - BELLOT Victor <victor.bellot@ensta-bretagne.org> (Promotion ENSTA Bretagne 2024 - Spécialité Robotique Autonome)
+        - PILON Martin <martin.pilon@ensta-bretagne.org> (Promotion ENSTA Bretagne 2024 - Spécialité Robotique Autonome)
+    
+    (Title3) Description
+    => Décrire l'objectif de la matière et les compétences à acquérir (Vous êtes libre sur la forme et le contenu)
 
-### Several small programs are given in the **py** folder :
+    (Title3) Remarque(s)
+    => Vous pouvez ajouter ici des remarques perso (ex: telle partie fonctionnelle mais à améliorer) ou des commentaires généraux sur votre travail (Vous êtes libre sur la forme et le contenu)
 
-robot_cmd_1_qx.py : (x=1..9) examples of programs to solve questions 1 to 9 of the low level control lab.
+    (Title2) Sommaire
+    => Faire un sommaire avec des balises (cf tutoriel 3)
+    /L'objectif est qu'un cliquant sur 'partie 4' mon navigateur m'emmene automatique jusqu'à la partie 4/
 
-fast_heading_calibration.py : a very ... very very simple 2D calibration of the compass by making the robot turning in places to get min and max values of the
-horizontal magnetic field (these values, different for each dart, can be entered in the imu9 driver)
+    (Title2) Strucutre du Git
+    => Expliquer comment sont orgranisés vos fichiers dans votre répertoire Gitlab (Vous êtes libre sur la forme et le contenu)
 
-stop.py just stops the robot and indicate the battery voltage
+    (Title2) Informations Générales
+    
+        (Title3) Etat du projet
+        => Donner des informations sur l'avancement du projet (en cours, 60%, terminé, ...) (Vous êtes libre sur la forme et le contenu)
 
-manual_control.py  controls manually the robot with the laptop keyboard (ESC to exit, all other keys are defined in the program)
+        (Title3) Travail effectué
+        ### Sceance 1:
 
-### Executing a program on the real robot 
+        Creation of the groupe DART-BP with BELLOT victor and PILON Martin.
 
-Asuming that your group is grp-dum, the program to test is stop.py, the number of the dart is 7, the user and passwd are uv27 :
+        Creation of a GitLab
 
-``` bash
-$ scp -r py uv27@172.20.25.107:grp-dum
-```
+        Instalation of V-REP
 
-Then in another terminal, log in the dart using ssh with user uv27 (passwd uv27)
+        Lunching program of the first questions to try V-REP. It works on one computer but not the second one. 
 
-``` bash
-$ ssh uv27@172.20.25.107
-$ cd grp-dum/py
-$ python3 stop.py
-```
+        Try GitLab (push/pull/commit)
+        
+        ### Seance 2:
 
+        We have made the question 1 to 5. The program have been already written but we have made some changes, correct some issues. We push it on a development branch
 
-## DartV2 - Lab1 - Part 3 - Motion Control
+        Try to install Unbuntu on the second one with the help of M. Le-Bars. It conclude to the fact that we need to make some save of the computer before 
+        continuing.
 
-**Now describe your work here ...**
+        ### Seance 3:
 
-### Sceance 1:
+        Continuing questions, we have made questions 6 and 7
 
-Creation of the groupe DART-BP with BELLOT victor and PILON Martin.
+        Edit the README
 
-Creation of a GitLab
+        ### Between Sceances:
 
-Instalation of V-REP
+        Continuing questions
 
-Lunching program of the first questions to try V-REP. It works on one computer but not the second one. 
-
-Try GitLab (push/pull/commit)
- 
-### Seance 2:
-
-We have made the question 1 to 5. The program have been already written but we have made some changes, correct some issues. We push it on a development branch
-
-Try to install Unbuntu on the second one with the help of M. Le-Bars. It conclude to the fact that we need to make some save of the computer before 
-continuing.
-
-### Seance 3:
-
-Continuing questions, we have made questions 6 and 7
-
-Edit the README
-
-### Between Sceances:
-
-Continuing questions
-
-### Seance 4:
-
+        (Title3) Travail en cours
+        => Présenter de manière synthétique et globale le travail en cours (Vous êtes libre sur la forme et le contenu)
+    
+    (Title2) Guide d'utilisation
+    => Préciser comment utiliser vos codes et la mission qu'ils permettent de remplir (rotation d'un anngle alpha, avancer de Xcm, ...) (Vous êtes libre sur la forme et le contenu)
