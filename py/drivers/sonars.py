@@ -5,11 +5,11 @@ import platform
 
 
 class SonarsIO():
-    def __init__(self,sim=False,vsv=None):
+    def __init__(self, sim=False, vsv=None):
         self.__sim = sim
         if self.__sim:
             self.vsv = vsv
-        #print ("vsv",vsv,self.vsv)
+        # print ("vsv",vsv,self.vsv)
         self.__bus_nb = 2
         self.__addr_4_sonars = 0x21
         self.__addr_front_left = 0x070
@@ -31,7 +31,7 @@ class SonarsIO():
             
         # place your new class variables here
         for isn in range(4):
-            self.set_mode(isn+1,1)        
+            self.set_mode(isn+1, 1)
         self.front = -1.0
         self.left = -1.0
         self.right = -1.0
@@ -41,17 +41,16 @@ class SonarsIO():
         self.diag_left_w = -1.0
         self.diag_right_w = -1.0
 
-        
     # place your sonar functions here
-       
+
     # read two data bytes at once
     def read_diag_left_word(self):
         try:
-            self.__dev_i2c_front_left.write(0,[0x51])
+            self.__dev_i2c_front_left.write(0, [0x51])
             time.sleep(0.065)
             try:
-                vms,vls = self.__dev_i2c_front_left.read(2,2)
-                #print (vms,vls)
+                vms, vls = self.__dev_i2c_front_left.read(2, 2)
+                # print (vms,vls)
                 self.diag_left_w = float(vls + (vms << 8))/100.0
             except:
                 self.diag_left_w = -1
@@ -62,11 +61,11 @@ class SonarsIO():
     # read two data bytes at once
     def read_diag_right_word(self):
         try:
-            self.__dev_i2c_front_right.write(0,[0x51])
+            self.__dev_i2c_front_right.write(0, [0x51])
             time.sleep(0.065)
             try:
-                vms,vls = self.__dev_i2c_front_right.read(2,2)
-                #print (vms,vls)
+                vms, vls = self.__dev_i2c_front_right.read(2, 2)
+                # print (vms,vls)
                 self.diag_right_w = float(vls + (vms << 8))/100.0
             except:
                 self.diag_right_w = -1
@@ -76,14 +75,14 @@ class SonarsIO():
 
     # read two bytes separately
     def read_diag_left(self):
-        #self.bus.write_i2c_block_data(self.addr_l,0,[0x51])
+        # self.bus.write_i2c_block_data(self.addr_l,0,[0x51])
         try:
-            self.__dev_i2c_front_left.write(0,[0x51])
+            self.__dev_i2c_front_left.write(0, [0x51])
             time.sleep(0.065)
             try:
                 vms = self.__dev_i2c_front_left.read_byte(2)
                 vls = self.__dev_i2c_front_left.read_byte(3)
-                #print (vms,vls)
+                # print (vms,vls)
                 self.diag_left = float(vls + (vms << 8))/100.0
             except:
                 self.diag_left = -1
@@ -93,14 +92,14 @@ class SonarsIO():
 
     # read two bytes separately
     def read_diag_right(self):
-        #self.bus.write_i2c_block_data(self.addr_r,0,[0x51])
+        # self.bus.write_i2c_block_data(self.addr_r,0,[0x51])
         try:
-            self.__dev_i2c_front_right.write(0,[0x51])
+            self.__dev_i2c_front_right.write(0, [0x51])
             time.sleep(0.065)
             try:
                 vms = self.__dev_i2c_front_right.read_byte(2)
                 vls = self.__dev_i2c_front_right.read_byte(3)
-                #print (vms,vls)
+                # print (vms,vls)
                 self.diag_right = float(vls + (vms << 8))/100.0        
             except:
                 self.diag_right = -1
@@ -110,37 +109,37 @@ class SonarsIO():
 
     def read_diag_all(self):
         self.read_diag_both()
-        return [self.diag_left,self.diag_right]
+        return [self.diag_left, self.diag_right]
 
     def read_diag_both(self):
-        #self.bus.write_i2c_block_data(self.addr_l,0,[0x51])
-        #self.bus.write_i2c_block_data(self.addr_r,0,[0x51])
+        # self.bus.write_i2c_block_data(self.addr_l,0,[0x51])
+        # self.bus.write_i2c_block_data(self.addr_r,0,[0x51])
         try:
-            self.__dev_i2c_front_left.write(0,[0x51])
-            self.__dev_i2c_front_right.write(0,[0x51])
+            self.__dev_i2c_front_left.write(0, [0x51])
+            self.__dev_i2c_front_right.write(0, [0x51])
             time.sleep(0.065)
             try:
                 vms = self.__dev_i2c_front_left.read_byte(2)
                 vls = self.__dev_i2c_front_left.read_byte(3)
-                #vms = self.bus.read_byte_data(self.addr_l,2)
-                #vls = self.bus.read_byte_data(self.addr_l,3)
-                #print (vms,vls)
+                # vms = self.bus.read_byte_data(self.addr_l,2)
+                # vls = self.bus.read_byte_data(self.addr_l,3)
+                # print (vms,vls)
                 self.diag_left = float(vls + (vms << 8))/100.0
             except:
                 self.diag_left = -1
             try:
                 vms = self.__dev_i2c_front_right.read_byte(2)
                 vls = self.__dev_i2c_front_right.read_byte(3)
-                #vms = self.bus.read_byte_data(self.addr_r,2)
-                #vls = self.bus.read_byte_data(self.addr_r,3)
-                #print (vms,vls)
+                # vms = self.bus.read_byte_data(self.addr_r,2)
+                # vls = self.bus.read_byte_data(self.addr_r,3)
+                # print (vms,vls)
                 self.diag_right = float(vls + (vms << 8))/100.0        
             except:
                 self.diag_right = -1
         except:
             self.diag_left = -1
             self.diag_right = -1
-        return [self.diag_left,self.diag_right]
+        return [self.diag_left, self.diag_right]
 
     def get_version(self):
         return self.__dev_i2c_4_sonars.read_byte(0xC0)
@@ -160,7 +159,6 @@ class SonarsIO():
         idist = int(round(dist*100.0))
         vals = [idist%256,idist//256]
         self.__dev_i2c_4_sonars.write(offs,vals)
-
 
     def init_4_sonars (self,dmax=1.5,mode="sync"):
         for isn in range(4):

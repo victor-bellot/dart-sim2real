@@ -14,18 +14,23 @@ import time
 # this way we are sure to give access to methods we know we want to provide
 # rather than falling back to parent class' methods
 
+
 # provide a student-proof dictionary with immutable keys 
 class FixedDict():
         def __init__(self, dictionary):
             self._dictionary = dictionary
+
         def __setitem__(self, key, item):
                 if key not in self._dictionary:
                     raise KeyError("The key {} is not defined.".format(key))
                 self._dictionary[key] = item
+
         def __getitem__(self, key):
             return self._dictionary[key]
+
         def values(self):
             return self._dictionary.values()
+
 
 class TrexIO():
     """

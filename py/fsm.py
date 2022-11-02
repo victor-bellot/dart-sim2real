@@ -1,5 +1,6 @@
 import sys
 
+
 class fsm:
     def __init__(self):
         self.transitions = {}
@@ -10,7 +11,7 @@ class fsm:
         self.prevState = None
         self.endState = None
 
-    def str2fun(self,astr):
+    def str2fun(self, astr):
         module, _, function = astr.rpartition('.')
         if module:
             __import__(module)
@@ -19,11 +20,11 @@ class fsm:
             mod = sys.modules['__main__']  # or whatever's the "default module"
         return getattr(mod, function)
 
-    def load_fsm_from_file (self,file_fsm):
+    def load_fsm_from_file(self, file_fsm):
         ffsm = open(file_fsm)
         mode = None
         for l in ffsm.readlines():
-            l = l[0:-1] # remove cr
+            l = l[0:-1]  # remove cr
             if l.startswith("----- States"):
                 mode = "st"
             elif l.startswith("----- Events"):
@@ -46,16 +47,16 @@ class fsm:
                 elif mode == "tr":
                     sl = l.split(" ")
                     func = self.str2fun(sl[3])
-                    self.add_transition (sl[0],sl[1],sl[2],func)
+                    self.add_transition(sl[0], sl[1], sl[2], func)
                 elif mode == "ev":
-                    self.add_event (l)
+                    self.add_event(l)
                 elif mode == "st":
-                    self.add_state (l)
+                    self.add_state(l)
         ffsm.close()
 
     def add_transition(self, state1, state2, event, funct):
         key = state1+'.'+event
-        self.transitions [key] = (state2, funct)
+        self.transitions[key] = (state2, funct)
 
     def add_state(self, state):
         self.states.append(state)
@@ -77,9 +78,9 @@ class fsm:
         state = self.curState
         key = state+'.'+event
         self.prevState = state
-        self.curState = self.transitions [key][0]
+        self.curState = self.transitions[key][0]
         if self.prevState != self.curState:
             st = "Transition - Old State : "+state+"; Event : "+event+"; New state : "+self.curState
-            st = st+"; Action : "+self.transitions [key][1].__name__+"()"
-            print (st)
-        return self.transitions [key][1]
+            st = st+"; Action : "+self.transitions[key][1].__name__+"()"
+            print(st)
+        return self.transitions[key][1]
