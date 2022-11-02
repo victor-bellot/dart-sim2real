@@ -17,7 +17,7 @@ Nous allons ensuite expérimenter le passage de la commande d'un robot dans une 
     5. [README.md](#readmemd)
 2. [Informations Générales](#informations-générales)
     1. [Etat du projet](#etat-du-projet)
-    2. [Travail effectué](#travail-effectue)
+    2. [Travail effectué](#travail-effectué)
     3. [Journal de bord](#journal-de-bord)
     4. [Travail en cours](#travail-en-cours)
 3. [Guide d'utilisation](#guide-dutilisation)
@@ -62,26 +62,25 @@ Lors de ces scéances nous nous sommes orientés vers la compréhension du fonct
     * Création d'un GitLab.
     * Instalation de V-REP.
     * Lancé le programme de la première question pour essayer V-REP. Il fonctionne sur le premier ordinateur, mais pas sur le second. 
-    * Essai GitLab (push/pull/commit).
-
+    * Essai GitLab (push/pull/commit).   
+.         
 * Séance 2:
     * Nous avons fait les questions de 1 à 5. Le programme a été écrit mais nous avons fait quelques modifications, résoluts quelques problèmes. Nous l'avons push dans la branche development.
-    * Nous avons essayé de téléchargé Unbuntu sur le second pc avec l'aide de M. Le-Bars. Celà a conclue sur le fait qu'il vaudrait mieux faire des sauvegardes du pc avant de continué le téléchargement.
-
-
+    * Nous avons essayé de téléchargé Unbuntu sur le second pc avec l'aide de M. Le-Bars. Celà a conclue sur le fait qu'il vaudrait mieux faire des sauvegardes du pc avant de continué le téléchargement.     
+.    
 * Séance 3:
     * Nous avons continué les question de 6 à 7.
-    * Ecriture du README.
-
+    * Ecriture du README.      
+.        
 * Entre Séances:
-    * Mise en forme du README.
-
+    * Mise en forme du README.      
+.     
 * Séance 4:
     * Nous avons fini les question 8 et 9.
     * Compréhension de la FSM (Finite State Machine)
     * Création d'une classe robot regroupant toute les fonctions nécessaire au fonctionement du DART
-    * Ecriture du README.
-
+    * Ecriture du README.   
+.          
 ### Travail en cours
 
 Actuellement Commencé le tp sur le FSM
