@@ -23,6 +23,12 @@ Nous allons ensuite expérimenter le passage de la commande d'un robot dans une 
 3. [Guide d'utilisation](#guide-dutilisation)
 
 ## Structure du Git
+Le Git à deux branches principales : 
+* main
+Cette branche sera updaté de manière discontinue avec avec des programmes qui fonctionne
+* development
+La branche development sera la branche où nous ferons coderons et développerons 
+
 Le Git est composé de plusieurs fichier et dossier :
 
 ### Dossier py
