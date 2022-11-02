@@ -1,4 +1,5 @@
-tSimVar={"vSimTime" : 0.0,
+tSimVar = {
+         "vSimTime" : 0.0,
          "vLocation" : [0.,0.,0.],
          "vAccelX" : 0.0,
          "vAccelY" : 0.0,
@@ -13,7 +14,6 @@ tSimVar={"vSimTime" : 0.0,
          "vCmdSpeedLeft" : 0.0,
          "vCmdSpeedRight" : 0.0,
          "vCmdSpeedNew" : 0.0,
-
          "vSonarVersion" : 1,
          "vSonar1Mode" : 2,
          "vSonar2Mode" : 2,
@@ -48,7 +48,6 @@ tSimVar={"vSimTime" : 0.0,
          "vSonar6SimEnd" : False,
          "vSonar5Acq" : 0,
          "vSonar6Acq" : 0,
-
          "vEncoderVersion" : 1,
          "vEncoderFrontLeft" : 0,
          "vEncoderFrontRight" : 0,
@@ -71,8 +70,6 @@ tSimVar={"vSimTime" : 0.0,
          "vHeading" : 0.0,
          "vVoltage" : 6.5,
          "vVoltageBin" : 310,
-
-         "vMotorLeftRightDiff" : 1.01, # +/- % assymetric motor speed
-         "vCmdToAngSpeed" : 1./7.8, # speed cmd to actual angular speed
-
+         "vMotorLeftRightDiff" : 1.01,  # +/- % assymetric motor speed
+         "vCmdToAngSpeed" : 1./7.8,  # speed cmd to actual angular speed
 }
