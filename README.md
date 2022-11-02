@@ -57,26 +57,26 @@ Lors de ces scéances nous nous sommes orientés vers la compréhension du fonct
 
 ### Journal de bord
 
-* Scéance 1:
+* Séance 1:
     * Création d'un groupe DART-BP avec BELLOT Victor et PILON Martin.
     * Création d'un GitLab.
     * Instalation de V-REP.
     * Lancé le programme de la première question pour essayer V-REP. Il fonctionne sur le premier ordinateur, mais pas sur le second. 
     * Essai GitLab (push/pull/commit).
 
-* Scéance 2:
+* Séance 2:
     * Nous avons fait les questions de 1 à 5. Le programme a été écrit mais nous avons fait quelques modifications, résoluts quelques problèmes. Nous l'avons push dans la branche development.
     * Nous avons essayé de téléchargé Unbuntu sur le second pc avec l'aide de M. Le-Bars. Celà a conclue sur le fait qu'il vaudrait mieux faire des sauvegardes du pc avant de continué le téléchargement.
 
 
-* Scéance 3:
+* Séance 3:
     * Nous avons continué les question de 6 à 7.
     * Ecriture du README.
 
-* Entre Scéances:
+* Entre Séances:
     * Mise en forme du README.
 
-* Scéance 4:
+* Séance 4:
     * Compréhension de la FSM (Finite State Machine)
     * Création d'une classe robot regroupant toute les fonctions nécessaire au fonctionement du DART
     * Ecriture du README.
