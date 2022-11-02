@@ -77,13 +77,15 @@ Lors de ces scéances nous nous sommes orientés vers la compréhension du fonct
     * Mise en forme du README.
 
 * Séance 4:
+    * Nous avons fini les question 8 et 9.
     * Compréhension de la FSM (Finite State Machine)
     * Création d'une classe robot regroupant toute les fonctions nécessaire au fonctionement du DART
     * Ecriture du README.
 
 ### Travail en cours
 
-Actuellement sur la question X du TP
+Actuellement Commencé le tp sur le FSM
+
 
 ## Guide d'utilisation
 => Préciser comment utiliser vos codes et la mission qu'ils permettent de remplir (rotation d'un anngle alpha, avancer de Xcm, ...) (Vous êtes libre sur la forme et le contenu)
