@@ -1,7 +1,7 @@
 import sys
 
 
-class fsm:
+class Fsm:
     def __init__(self):
         self.transitions = {}
         self.states = []
@@ -40,18 +40,24 @@ class fsm:
             else:
                 if mode == "ss":
                     self.curState = l
-                if mode == "es":
+                    print("Set current state", l)
+                elif mode == "es":
                     self.endState = l
-                if mode == "se":
+                    print("Set end state", l)
+                elif mode == "se":
                     self.curEvent = l
+                    print("Set current event", l)
                 elif mode == "tr":
                     sl = l.split(" ")
+                    print("Add transition", sl)
                     func = self.str2fun(sl[3])
                     self.add_transition(sl[0], sl[1], sl[2], func)
                 elif mode == "ev":
                     self.add_event(l)
+                    print("Add event", l)
                 elif mode == "st":
                     self.add_state(l)
+                    print("Add state", l)
         ffsm.close()
 
     def add_transition(self, state1, state2, event, funct):

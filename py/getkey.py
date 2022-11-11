@@ -24,5 +24,5 @@ if __name__ == "__main__":
             print(ch, ich, "%2.2X" % ich)
         else:
             print(ich, "%2.2X" % ich)
-        if ich == 27 or ich == 3:   # 3 = CTRL+C
+        if ich == 27 or ich == 3:  # 3 = CTRL+C
             break

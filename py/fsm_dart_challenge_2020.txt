@@ -1,0 +1,28 @@
+----- States
+Idle
+Forward
+TurnLeft
+TurnRight
+End
+----- Transitions
+Idle Idle stay doWait
+Idle Forward continue doForward
+Forward Forward stay doForward
+Forward TurnLeft left doTurnLeft
+Forward TurnRight right doTurnRight
+TurnLeft Forward continue doForward
+TurnRight Forward continue doForward
+TurnLeft End stop doStop
+TurnRight End stop doStop
+----- Events
+stay
+continue
+left
+right
+stop
+---- Start State
+Idle
+---- Start Event
+stay
+---- End State
+End

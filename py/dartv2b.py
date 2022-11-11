@@ -8,13 +8,36 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         # get init from parent class
         # drivers.dartv2b_basis.DartV2Basis.__init__(self)
         super().__init__()
-        # define class variables
-        self.myVarDummy = 42
 
         # place your new class variables here
+        self.time_start = time.time()
+        self.begin_wait = 2
+        self.turn_count = 12
 
-    # place your new functions here
-    
+    # place your new functions here OK
+
+    def wait(self, duration):
+        print("Do nothing for", duration, "s")
+        time.sleep(duration)
+
+    def go_straight(self, duration):
+        print("Go straight for", duration, "s")
+        self.set_speed(100, 100)
+        time.sleep(duration)
+        self.stop()
+
+    def half_turn(self):
+        print("Make an half-turn")
+        self.set_speed(100, -100)
+        time.sleep(1.31)  # empirical
+        self.stop()
+
+    # TODO
+    def obst_front(self): return
+    def get_free_direction(self): return
+    def turn_left(self): return
+    def turn_right(self): return
+
     def battery_voltage(self):
         return self.encoders.battery_voltage()
 
@@ -29,7 +52,7 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         odofl, odofr = self.get_front_odos()
         odorl, odorr = self.get_rear_odos()
         return odofl, odofr, odorl, odorr
-    
+
     def get_front_odos(self):
         """
         DART wheels are 12 cm diameter
@@ -40,9 +63,9 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         odofl, odofr = self.get_front_encoders()
         self.update_front_encoders(time.time(), odofl, odofr)
         return odofl, odofr
-            
+
     def get_rear_odos(self):
-        odorl,odorr = self.get_rear_encoders()
+        odorl, odorr = self.get_rear_encoders()
         while odorl < 0:
             time.sleep(0.0005)
             print("------ error I2C odorl")
@@ -53,8 +76,8 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
             dummy, odorr = self.get_rear_encoders()
         self.update_rear_encoders(time.time(), odorl, odorr)
         return odorl, odorr
-    
-    def delta_odometers_without_jumps (self, odo_mem, odo_last):
+
+    def delta_odometers_without_jumps(self, odo_mem, odo_last):
         deltaOdo = odo_last - odo_mem  # last=new and mem=old
         if deltaOdo > 32767:  # check if high positive jumps !!
             deltaOdo -= 65536  # remove the jump (2^16)
@@ -77,7 +100,7 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
             deltaOdoRight = self.delta_odometers_without_jumps(
                 self.encoders_front_right_mem, self.encoders_front_right_last)
             return deltaOdoRight
-        
+
     def delta_rear_odometers(self, side="both"):
         if side == "both":
             deltaOdoLeft = self.delta_odometers_without_jumps(
@@ -98,14 +121,14 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         if d == 0.0:
             d = 99.9
         return d
-    
+
     def get_cardinal_sonars(self):
         df, dl, db, dr = self.sonars.read_4_sonars()
         # print ("df,dl,db,dr",df,dl,db,dr)
-        df = self.set_sonar_0_to_99(df/100.0)
-        dl = self.set_sonar_0_to_99(dl/100.0)
-        db = self.set_sonar_0_to_99(db/100.0)
-        dr = self.set_sonar_0_to_99(dr/100.0)
+        df = self.set_sonar_0_to_99(df / 100.0)
+        dl = self.set_sonar_0_to_99(dl / 100.0)
+        db = self.set_sonar_0_to_99(db / 100.0)
+        dr = self.set_sonar_0_to_99(dr / 100.0)
         self.update_cardinal_sonars(time.time(), df, dl, db, dr)
         return df, dl, db, dr
 
@@ -169,7 +192,7 @@ if __name__ == "__main__":
     print("Encoders :", myDart.encoders.read_encoders())
     # myDart.encoders.reset_right()
     time.sleep(1.0)
-    print ("Encoders :", myDart.encoders.read_encoders())
+    print("Encoders :", myDart.encoders.read_encoders())
     # myDart.encoders.reset_both()
     time.sleep(1.0)
     print("Encoders :", myDart.encoders.read_encoders())
