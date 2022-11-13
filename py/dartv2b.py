@@ -33,10 +33,10 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         self.stop()
 
     # TODO
-    def obst_front(self): return
-    def get_free_direction(self): return
-    def turn_left(self): return
-    def turn_right(self): return
+    def obst_front(self): return  # boolean : tell if it's time to turn
+    def get_free_direction(self): return  # 'left' or 'right' : which direction to go
+    def turn_left(self): return  # None : make this robot turn to the left
+    def turn_right(self): return  # None : make this robot turn to the right
 
     def battery_voltage(self):
         return self.encoders.battery_voltage()
