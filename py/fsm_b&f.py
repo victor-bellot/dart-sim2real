@@ -32,8 +32,8 @@ def doTurn():
     print(">>>>>> action")
     my_bot.half_turn()
 
-    my_bot.turn_count += 1
-    if my_bot.turn_count == 2:
+    my_bot.turn_count -= 1
+    if my_bot.turn_count == 0:
         event = 'stop'
     else:
         event = 'continue'
@@ -52,6 +52,7 @@ if __name__ == "__main__":
 
     # create a robot (to be replaced by dartv2)
     my_bot = DartV2()
+    my_bot.turn_count = 2
 
     # fsm loop
     running = True

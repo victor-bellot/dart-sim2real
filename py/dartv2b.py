@@ -1,4 +1,5 @@
 import drivers.dartv2b_basis
+from tools import *
 import sys
 import time
 
@@ -12,9 +13,39 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         # place your new class variables here
         self.time_start = time.time()
         self.begin_wait = 2
-        self.turn_count = 12
+        self.turn_count = None
 
     # place your new functions here OK
+
+    def calibration_compass(self):
+        k = 0
+        near = True
+        eps = math.pi / 10
+
+        mag_x, mag_y, _ = self.imu.read_mag_raw()
+        init_head = mag2heading(mag_x, mag_y)  # between -pi and +pi
+
+        mag_xs, mag_ys = [], []
+        self.set_speed(-75, 75)
+
+        while k < 2:
+            mag_x, mag_y, _ = self.imu.read_mag_raw()
+            mag_xs.append(mag_x)
+            mag_ys.append(mag_y)
+
+            head = mag2heading(mag_x, mag_y)
+            new_near = abs((head - init_head) % (2 * math.pi)) < eps
+            if near ^ new_near:
+                k += 1
+            near = new_near
+            time.sleep(0.05)
+
+        self.stop()
+
+        mag_x_min, mag_x_max = min(mag_xs), max(mag_xs)
+        mag_y_min, mag_y_max = min(mag_ys), max(mag_ys)
+
+        self.imu.fast_heading_calibration(mag_x_min, mag_x_max, mag_y_min, mag_y_max)
 
     def wait(self, duration):
         print("Do nothing for", duration, "s")

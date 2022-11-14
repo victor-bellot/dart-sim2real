@@ -65,6 +65,7 @@ if __name__ == "__main__":
 
     # create a robot (to be replaced by dartv2)
     my_bot = DartV2()
+    my_bot.turn_count = 12
 
     # fsm loop
     running = True
