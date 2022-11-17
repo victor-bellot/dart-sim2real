@@ -49,10 +49,15 @@ En cours
 
 ### Travail effectué
 
-#### Partie 1 Découverte du projet
-Scéance 1 à Scéance 4
+#### Partie 1 Découverte du projet et des fonctions proposé 
+Scéance 1 à scéance 4
 Lors de ces scéances nous nous sommes orientés vers la compréhension du fonctionnement des différents drivers, afin de pouvoir les utilisés au cours du projet.
-#### Partie 2 Utilisation de fonctions simple du projet
+#### Partie 2 Implémentation des différentes fonction pour le projet
+Scéance 5 à scéance X  
+Nous avons créer une classe DartV2 ou nous avons ajouté de nombreuses fonctions pour le controle du dart.  
+Nous avons créer des fsm pour
+Implémentation de la boussolle
+
 #### Partie 3  de fonctions simple du projet
 
 ### Journal de bord
@@ -80,10 +85,20 @@ Lors de ces scéances nous nous sommes orientés vers la compréhension du fonct
     * Compréhension de la FSM (Finite State Machine)
     * Création d'une classe robot regroupant toute les fonctions nécessaire au fonctionement du DART
     * Ecriture du README.   
-.          
+.    
+* Entre Séances:
+    * Création du fsm_b&f.py et du txt associé
+    * Création du fsm_dart_challenge_2020.py et du txt associé
+    * Modification du fsm_full_turn.py
+    * Modification de la classe dartv2b 
+.              
+* Scéance 5:
+    * Ecriture des méthodes de dartv2b
+    * Rajout d'une boussole pour le dartv2 afin d'avoir des rotations précises 
+.
 ### Travail en cours
 
-Actuellement Commencé le tp sur le FSM
+Actuellement sur la modification de la class DartV2
 
 
 ## Guide d'utilisation

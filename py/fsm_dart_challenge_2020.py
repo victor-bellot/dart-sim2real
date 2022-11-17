@@ -6,24 +6,18 @@ from dartv2b import DartV2
 # functions (actions of the fsm)
 def doWait():
     print(">>>>>> action")
-    my_bot.wait(duration=1)
+    my_bot.calibration_compass()
 
-    if time.time() - my_bot.time_start > my_bot.begin_wait:  # auto start in 5 seconds
-        event = "continue"
-    else:
-        event = "stay"
-
-    return event
+    return 'continue'
 
 
 def doForward():
     print(">>>>>> action")
-    my_bot.go_straight(duration=0.1)
+    my_bot.go_straight_to_obs_compass()
 
-    if my_bot.obst_front():
+    event = None
+    while event is None:
         event = my_bot.get_free_direction()
-    else:
-        event = 'stay'
 
     return event
 

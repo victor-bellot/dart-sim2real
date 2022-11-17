@@ -11,16 +11,18 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         super().__init__()
 
         # place your new class variables here
-        self.time_start = time.time()
-        self.begin_wait = 2
         self.turn_count = None
+        self.spdMin = 70
+        self.nominalSpd = 200
+
+        self.sonars.init_4_sonars()  # initialize cardinals sonars in synchronous mode
 
     # place your new functions here OK
 
     def calibration_compass(self):
-        k = 0
-        near = True
-        eps = math.pi / 10
+        k = 0  # count the number of changes encounter
+        near = True  # tell if this robot is near it's initial heading
+        eps = math.pi / 10  # 1/20 revolution precision
 
         mag_x, mag_y, _ = self.imu.read_mag_raw()
         init_head = mag2heading(mag_x, mag_y)  # between -pi and +pi
@@ -33,8 +35,9 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
             mag_xs.append(mag_x)
             mag_ys.append(mag_y)
 
+            # a % b is in [0; b[
             head = mag2heading(mag_x, mag_y)
-            new_near = abs((head - init_head) % (2 * math.pi)) < eps
+            new_near = abs((head - init_head) % pix2) < eps
             if near ^ new_near:
                 k += 1
             near = new_near
@@ -51,11 +54,92 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         print("Do nothing for", duration, "s")
         time.sleep(duration)
 
-    def go_straight(self, duration):
-        print("Go straight for", duration, "s")
-        self.set_speed(100, 100)
-        time.sleep(duration)
+    def go_straight_to_obs_compass(self):
+        """
+        Go straight toward rb direction using the compass
+        until an obstacle is encountered
+
+        input parameters :
+        None
+
+        output parameters :
+        None
+        """
+
+        print("Go forward, following a cap, until an obstacle is encounter.")
+
+        spd_ask = self.nominalSpd  # nominal speed
+        center_to_wall = 25  # distance in centimeters to wall to stop
+
+        turn_dyn_const = 120 / 90  # proportional constant for cap regulation
+        straight_const = 5  # proportional constant for forward speed regulation
+
+        t_init = time.time()
+        min_duration = 1  # minimum amount of time before leaving
+        time_step = 0.1  # duration of each iteration
+        direction = round_direction(self.imu.heading_deg())
+
+        stage_in_progress = True
+        self.set_speed(spd_ask, spd_ask)
+
+        while stage_in_progress:
+            t0 = time.time()
+
+            dist_front, = self.get_sonars(['front'])
+            dist_center = dist_front - center_to_wall
+
+            current_angle = self.imu.heading_deg()
+            delta = normalize_angle(current_angle - direction)
+            delta_spd = turn_dyn_const * delta
+
+            if dist_front <= center_to_wall and t0 - t_init > min_duration:
+                stage_in_progress = False
+            else:
+                spd = max(min(spd_ask, straight_const * dist_center), self.spdMin)
+                self.set_speed(spd - delta_spd, spd + delta_spd)
+
+                delta_time = time.time() - t0
+                sleep_time = time_step - delta_time
+                if sleep_time > 0:
+                    time.sleep(sleep_time)
+
         self.stop()
+
+    def get_free_direction(self):
+        """
+        Return the orientation of the free direction
+
+        input parameters :
+        None
+
+        output parameters :
+        direction : which way to go
+        """
+
+        dist_left, dist_right = self.get_sonars(['left', 'right'])
+
+        if dist_left < 9990 and dist_right < 9990:
+            if dist_left < dist_right:
+                return 'right'
+            else:
+                return 'left'
+        else:
+            if dist_left < 9990:
+                return 'right'
+            elif dist_right < 9990:
+                return 'left'
+        return None
+
+    def get_sonars(self, names=None):
+        name2index = {'front': 0, 'left': 1, 'back': 2, 'right': 3}
+
+        values = self.sonars.read_4_sonars()
+        distances = [9990 if distance < 1 else distance for distance in values]
+
+        if names:
+            return [distances[name2index[name]] for name in names]
+        else:
+            return distances
 
     def half_turn(self):
         print("Make an half-turn")
@@ -63,11 +147,42 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         time.sleep(1.31)  # empirical
         self.stop()
 
-    # TODO
-    def obst_front(self): return  # boolean : tell if it's time to turn
-    def get_free_direction(self): return  # 'left' or 'right' : which direction to go
-    def turn_left(self): return  # None : make this robot turn to the left
-    def turn_right(self): return  # None : make this robot turn to the right
+    def turn_compass(self, cap):
+        """
+        Turn toward cap
+
+        input parameters :
+        cap : angle in degrees
+
+        output parameters :
+        None
+        """
+        print("Turn using compass toward: ", cap)
+        eps = 3  # precision in degrees
+        k = 1
+
+        def sens_and_norm():
+            # delta_heading is between -180° and +180°
+            heading = self.imu.heading_deg()
+            delta = (heading - cap) % 360
+            delta = delta - 360 if delta > 180 else delta
+            return sign_and_norm(delta)
+
+        while sens_and_norm()[1] > eps:
+            s, n = sens_and_norm()
+            spd = s * (self.spdMin + n * k)
+            self.set_speed(-spd, spd)
+            time.sleep(0.05)
+
+        self.stop()
+
+    def turn_left(self):
+        direction = round_direction(self.imu.heading_deg())
+        self.turn_compass(direction - 90)
+
+    def turn_right(self):
+        direction = round_direction(self.imu.heading_deg())
+        self.turn_compass(direction + 90)
 
     def battery_voltage(self):
         return self.encoders.battery_voltage()
