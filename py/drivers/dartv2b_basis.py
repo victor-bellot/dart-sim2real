@@ -494,7 +494,7 @@ class DartV2Basis:
         self.encoders_rear_left_last = odorl
         self.encoders_rear_right_last = odorr
 
-    def update_cardinal_sonars(self, t, df, dl, db, dr):
+    def write_cardinal_sonars(self, t, df, dl, db, dr):
         self.sonars_cardinal_acq_time = t
         self.sonars_cardinal_front = df
         self.sonars_cardinal_left = dl

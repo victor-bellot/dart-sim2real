@@ -24,3 +24,9 @@ def normalize_angle(angle):
     if angle > 180:
         return angle - 360
     return angle
+
+
+def set_sonar_0_to_99(d):
+    if d == 0.0:
+        d = 99.9
+    return d

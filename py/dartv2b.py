@@ -1,3 +1,4 @@
+from drivers.sonars import SonarsFilter
 import drivers.dartv2b_basis
 from tools import *
 import sys
@@ -9,28 +10,41 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         # get init from parent class
         # drivers.dartv2b_basis.DartV2Basis.__init__(self)
         super().__init__()
+        self.flt = SonarsFilter()
 
-        # place your new class variables here
-        self.turn_count = None
+        self.turnCount = None
+        self.dt = 0.05
+
         self.spdMin = 70
-        self.nominalSpd = 200
+        self.nominalSpd = 150
+
+        self.centerToWall = 0.25  # distance in meters to wall to stop
+        self.angularAccuracy = 3  # angular precision in degrees
+
+        self.capRegConst = (self.nominalSpd / 200) * (120 / 90)  # proportional constant for cap regulation
+        self.obsRegConst = 500  # proportional constant for forward speed regulation
 
         self.sonars.init_4_sonars()  # initialize cardinals sonars in synchronous mode
 
-    # place your new functions here OK
-
     def calibration_compass(self):
+        """
+        Calibrate the compass of this DartV2
+        -> fast calibration is apply : transforming an ellipse into a circle
+        """
+
+        revolution_count = 1  # number of revolution to do
+        eps = (1 / 60) * pix2  # 1/60
+
         k = 0  # count the number of changes encounter
         near = True  # tell if this robot is near it's initial heading
-        eps = math.pi / 10  # 1/20 revolution precision
 
         mag_x, mag_y, _ = self.imu.read_mag_raw()
         init_head = mag2heading(mag_x, mag_y)  # between -pi and +pi
 
         mag_xs, mag_ys = [], []
-        self.set_speed(-75, 75)
+        self.set_speed(-self.spdMin, self.spdMin)  # turn at minimum speed
 
-        while k < 2:
+        while k < 2 * revolution_count:
             mag_x, mag_y, _ = self.imu.read_mag_raw()
             mag_xs.append(mag_x)
             mag_ys.append(mag_y)
@@ -38,10 +52,9 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
             # a % b is in [0; b[
             head = mag2heading(mag_x, mag_y)
             new_near = abs((head - init_head) % pix2) < eps
-            if near ^ new_near:
-                k += 1
+            k += near ^ new_near
             near = new_near
-            time.sleep(0.05)
+            time.sleep(0.01)
 
         self.stop()
 
@@ -50,33 +63,18 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
 
         self.imu.fast_heading_calibration(mag_x_min, mag_x_max, mag_y_min, mag_y_max)
 
-    def wait(self, duration):
-        print("Do nothing for", duration, "s")
-        time.sleep(duration)
-
     def go_straight_to_obs_compass(self):
         """
-        Go straight toward rb direction using the compass
-        until an obstacle is encountered
-
-        input parameters :
-        None
-
-        output parameters :
-        None
+        Go straight toward this DartV2 direction using
+        the compass until an obstacle is encountered
         """
 
         print("Go forward, following a cap, until an obstacle is encounter.")
 
-        spd_ask = self.nominalSpd  # nominal speed
-        center_to_wall = 25  # distance in centimeters to wall to stop
-
-        turn_dyn_const = 120 / 90  # proportional constant for cap regulation
-        straight_const = 5  # proportional constant for forward speed regulation
-
         t_init = time.time()
+        spd_ask = self.nominalSpd  # nominal speed
+
         min_duration = 1  # minimum amount of time before leaving
-        time_step = 0.1  # duration of each iteration
         direction = round_direction(self.imu.heading_deg())
 
         stage_in_progress = True
@@ -85,81 +83,33 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         while stage_in_progress:
             t0 = time.time()
 
-            dist_front, = self.get_sonars(['front'])
-            dist_center = dist_front - center_to_wall
+            dist_front, = self.get_some_sonars(['front'])
+            dist_center = dist_front - self.centerToWall
 
             current_angle = self.imu.heading_deg()
             delta = normalize_angle(current_angle - direction)
-            delta_spd = turn_dyn_const * delta
+            delta_spd = self.capRegConst * delta
 
-            if dist_front <= center_to_wall and t0 - t_init > min_duration:
+            if dist_front <= self.centerToWall and t0 - t_init > min_duration:
                 stage_in_progress = False
             else:
-                spd = max(min(spd_ask, straight_const * dist_center), self.spdMin)
+                spd = max(min(spd_ask, self.obsRegConst * dist_center), self.spdMin)
                 self.set_speed(spd - delta_spd, spd + delta_spd)
 
                 delta_time = time.time() - t0
-                sleep_time = time_step - delta_time
+                sleep_time = self.dt - delta_time
                 if sleep_time > 0:
+                    # print("Time left: ", sleep_time)
                     time.sleep(sleep_time)
 
         self.stop()
 
-    def get_free_direction(self):
-        """
-        Return the orientation of the free direction
-
-        input parameters :
-        None
-
-        output parameters :
-        direction : which way to go
-        """
-
-        dist_left, dist_right = self.get_sonars(['left', 'right'])
-
-        if dist_left < 9990 and dist_right < 9990:
-            if dist_left < dist_right:
-                return 'right'
-            else:
-                return 'left'
-        else:
-            if dist_left < 9990:
-                return 'right'
-            elif dist_right < 9990:
-                return 'left'
-        return None
-
-    def get_sonars(self, names=None):
-        name2index = {'front': 0, 'left': 1, 'back': 2, 'right': 3}
-
-        values = self.sonars.read_4_sonars()
-        distances = [9990 if distance < 1 else distance for distance in values]
-
-        if names:
-            return [distances[name2index[name]] for name in names]
-        else:
-            return distances
-
-    def half_turn(self):
-        print("Make an half-turn")
-        self.set_speed(100, -100)
-        time.sleep(1.31)  # empirical
-        self.stop()
-
     def turn_compass(self, cap):
         """
-        Turn toward cap
-
-        input parameters :
-        cap : angle in degrees
-
-        output parameters :
-        None
+        Turn toward a given cap
         """
+
         print("Turn using compass toward: ", cap)
-        eps = 3  # precision in degrees
-        k = 1
 
         def sens_and_norm():
             # delta_heading is between -180° and +180°
@@ -168,11 +118,24 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
             delta = delta - 360 if delta > 180 else delta
             return sign_and_norm(delta)
 
-        while sens_and_norm()[1] > eps:
+        stage_in_progress = True
+        k = 1
+
+        while stage_in_progress:
+            t0 = time.time()
+
             s, n = sens_and_norm()
-            spd = s * (self.spdMin + n * k)
-            self.set_speed(-spd, spd)
-            time.sleep(0.05)
+            if n < self.angularAccuracy:
+                stage_in_progress = False
+            else:
+                spd = s * (self.spdMin + n * k)
+                self.set_speed(-spd, spd)
+
+                delta_time = time.time() - t0
+                sleep_time = self.dt - delta_time
+                if sleep_time > 0:
+                    # print("Time left: ", sleep_time)
+                    time.sleep(sleep_time)
 
         self.stop()
 
@@ -183,6 +146,51 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
     def turn_right(self):
         direction = round_direction(self.imu.heading_deg())
         self.turn_compass(direction + 90)
+
+    def get_free_direction(self):
+        """
+        Return the orientation of the free direction
+        -> which way to go
+        """
+
+        # Distances are given in meters
+        dist_left, dist_right = self.get_some_sonars(['left', 'right'])
+
+        if dist_left < 99.9 and dist_right < 99.9:
+            if dist_left < dist_right:
+                return 'right'
+            else:
+                return 'left'
+        else:
+            if dist_left < 99.9:
+                return 'right'
+            elif dist_right < 99.9:
+                return 'left'
+        return None
+
+    def get_some_sonars(self, names=None):
+        """
+        Return sonars values of the given sonar names
+        """
+
+        name2index = {'front': 0, 'left': 1, 'back': 2, 'right': 3}
+        self.update_cardinal_sonars()
+        distances = self.flt.median_filter()
+
+        if names:
+            return [distances[name2index[name]] for name in names]
+        else:
+            return distances
+
+    def wait(self, duration):
+        print("Do nothing for", duration, "s")
+        time.sleep(duration)
+
+    def half_turn(self):
+        print("Make an half-turn")
+        self.set_speed(100, -100)
+        time.sleep(1.31)  # empirical
+        self.stop()
 
     def battery_voltage(self):
         return self.encoders.battery_voltage()
@@ -263,20 +271,16 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
                 self.encoders_rear_right_mem, self.encoders_rear_right_last)
             return -deltaOdoRight
 
-    def set_sonar_0_to_99(self, d):
-        if d == 0.0:
-            d = 99.9
-        return d
-
-    def get_cardinal_sonars(self):
+    def update_cardinal_sonars(self):
         df, dl, db, dr = self.sonars.read_4_sonars()
         # print ("df,dl,db,dr",df,dl,db,dr)
-        df = self.set_sonar_0_to_99(df / 100.0)
-        dl = self.set_sonar_0_to_99(dl / 100.0)
-        db = self.set_sonar_0_to_99(db / 100.0)
-        dr = self.set_sonar_0_to_99(dr / 100.0)
-        self.update_cardinal_sonars(time.time(), df, dl, db, dr)
-        return df, dl, db, dr
+        df = set_sonar_0_to_99(df / 100.0)
+        dl = set_sonar_0_to_99(dl / 100.0)
+        db = set_sonar_0_to_99(db / 100.0)
+        dr = set_sonar_0_to_99(dr / 100.0)
+
+        self.flt.add_measures((df, dl, db, dr))
+        self.write_cardinal_sonars(time.time(), df, dl, db, dr)
 
     def get_diagonal_sonars(self):
         dl, dr = self.sonars.read_diag_all()

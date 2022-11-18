@@ -20,11 +20,6 @@ def doForward():
     print(">>>>>> action")
     my_bot.go_straight(duration=5)
 
-    # if my_bot.obst_front():
-    #     event = 'continue'
-    # else:
-    #     event = 'stay'
-
     return 'continue'
 
 
@@ -32,8 +27,8 @@ def doTurn():
     print(">>>>>> action")
     my_bot.half_turn()
 
-    my_bot.turn_count -= 1
-    if my_bot.turn_count == 0:
+    my_bot.turnCount -= 1
+    if my_bot.turnCount == 0:
         event = 'stop'
     else:
         event = 'continue'
@@ -52,7 +47,7 @@ if __name__ == "__main__":
 
     # create a robot (to be replaced by dartv2)
     my_bot = DartV2()
-    my_bot.turn_count = 2
+    my_bot.turnCount = 2
 
     # fsm loop
     running = True

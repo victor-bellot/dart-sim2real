@@ -7,7 +7,6 @@ End
 ----- Transitions
 Idle Idle stay doWait
 Idle Forward continue doForward
-Forward Forward stay doForward
 Forward TurnLeft left doTurnLeft
 Forward TurnRight right doTurnRight
 TurnLeft Forward continue doForward
