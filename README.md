@@ -53,6 +53,8 @@ En cours
 Scéance 1 à Scéance 4
 Lors de ces scéances nous nous sommes orientés vers la compréhension du fonctionnement des différents drivers, afin de pouvoir les utilisés au cours du projet.
 #### Partie 2 Utilisation de fonctions simple du projet
+Nous avons crée un final state machine (FSM) pour challenge dart 2020 dont le graphe est représenté ci-dessous
+![plot](https://gitlab.ensta-bretagne.fr/pilonma/dart-bp/-/blob/main/image/FSM_challenge_dart_2020_V1.JPG)
 #### Partie 3  de fonctions simple du projet
 
 ### Journal de bord
