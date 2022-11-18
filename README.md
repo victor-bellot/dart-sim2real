@@ -54,7 +54,12 @@ Scéance 1 à Scéance 4
 Lors de ces scéances nous nous sommes orientés vers la compréhension du fonctionnement des différents drivers, afin de pouvoir les utilisés au cours du projet.
 #### Partie 2 Utilisation de fonctions simple du projet
 Nous avons crée un final state machine (FSM) pour challenge dart 2020 dont le graphe est représenté ci-dessous
-![plot](https://gitlab.ensta-bretagne.fr/pilonma/dart-bp/-/blob/main/image/FSM_challenge_dart_2020_V1.JPG)
+![FSM_challenge_dart_2020](/uploads/6f07edb4bc6e7c8d6bdf8af6d3c9e016/FSM_challenge_dart_2020_V1.JPG)
+Plus précisément nous avons un conteur que nous initialison à 12 dans init et à chaque rotation il diminue de 1. Quand il arrive à 0 Turn fait la commande stop
+Un capteur avant qui mesure une distance permet de déterminer quand le dart passe de forward a turn, lorsque que le capteur perçoit une distance inférieur à une distance fixé. Nous utilisons un filtre pour supprimer les valeurs aberrantes. Les capteurs sur les cotés vont permettre de savoir si le dart tourne left or right. Après l'application du même type de filtre que le filtre avant, si le capteur ne retourne rien alors c'est qu'il n'y a pas de mur et qu'il faut tourner dans cette direction.  
+
+Pour l'asservissement nous utilisons la boussole pour un suivi de cap et avoir des rotations précises. Nous faisons donc une callibration afin d'initialisé la boussole.
+
 #### Partie 3  de fonctions simple du projet
 
 ### Journal de bord
