@@ -87,6 +87,15 @@ Pour l'asservissement nous utilisons la boussole pour un suivi de cap et avoir d
     * Compréhension de la FSM (Finite State Machine)
     * Création d'une classe robot regroupant toute les fonctions nécessaire au fonctionement du DART
     * Ecriture du README.   
+.
+* Entre Séances:
+    * Mise en place d'un asservissement en cap grâce à une boussole interne.      
+.     
+* Séance 4:
+    * Nous avons fini les question 8 et 9.
+    * Compréhension de la FSM (Finite State Machine)
+    * Création d'une classe robot regroupant toute les fonctions nécessaire au fonctionement du DART
+    * Ecriture du README. 
 .          
 ### Travail en cours
 
