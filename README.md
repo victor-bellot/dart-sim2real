@@ -66,36 +66,46 @@ Pour l'asservissement nous utilisons la boussole pour un suivi de cap et avoir d
 
 * Séance 1:
     * Création d'un groupe DART-BP avec BELLOT Victor et PILON Martin.
-    * Création d'un GitLab.
-    * Instalation de V-REP.
+    * Création d'un GitLab 
+    * Instalation de V-REP
     * Lancé le programme de la première question pour essayer V-REP. Il fonctionne sur le premier ordinateur, mais pas sur le second. 
-    * Essai GitLab (push/pull/commit).   
+    * Essai GitLab (push/pull/commit)  
 .         
 * Séance 2:
-    * Nous avons fait les questions de 1 à 5. Le programme a été écrit mais nous avons fait quelques modifications, résoluts quelques problèmes. Nous l'avons push dans la branche development.
-    * Nous avons essayé de téléchargé Unbuntu sur le second pc avec l'aide de M. Le-Bars. Celà a conclue sur le fait qu'il vaudrait mieux faire des sauvegardes du pc avant de continué le téléchargement.     
+    * Nous avons fait les questions de 1 à 5. Le programme a été écrit mais nous avons fait quelques modifications, résoluts quelques problèmes. Nous l'avons push dans la branche development
+    * Nous avons essayé de téléchargé Unbuntu sur le second pc avec l'aide de M. Le-Bars. Celà a conclue sur le fait qu'il vaudrait mieux faire des sauvegardes du pc avant de continué le téléchargement     
 .    
 * Séance 3:
-    * Nous avons continué les question de 6 à 7.
-    * Ecriture du README.      
+    * Nous avons continué les question de 6 à 7
+    * Ecriture du README  
 .        
 * Entre Séances:
-    * Mise en forme du README.      
+    * Mise en forme du README  
 .     
 * Séance 4:
     * Nous avons fini les question 8 et 9.
     * Compréhension de la FSM (Finite State Machine)
     * Création d'une classe robot regroupant toute les fonctions nécessaire au fonctionement du DART
-    * Ecriture du README.   
+    * Ecriture du README   
 .
 * Entre Séances:
-    * Mise en place d'un asservissement en cap grâce à une boussole interne.      
+    * Création du fsm_b&f.py et du txt associé
+    * Création du fsm_dart_challenge_2020.py et du txt associé
+    * Modification du fsm_full_turn.py
+    * Modification de la classe dartv2b  
+.              
+* Scéance 5:
+    * Ecriture des méthodes de dartv2b
+    * Rajout d'une boussole pour le dartv2 afin d'avoir des rotations précises 
+    * Rajout d'une phase callibration de la boussole
+    * Ecriture du README   
+.
+* Entre Séances:
+    * Mise en place d'un asservissement en cap grâce à une boussole interne       
 .     
-* Séance 4:
-    * Nous avons fini les question 8 et 9.
-    * Compréhension de la FSM (Finite State Machine)
-    * Création d'une classe robot regroupant toute les fonctions nécessaire au fonctionement du DART
-    * Ecriture du README. 
+* Séance 6:
+    * Rajout d'un filtre sur les capteurs 
+    * Ecriture du README   
 .          
 ### Travail en cours
 
