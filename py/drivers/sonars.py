@@ -258,9 +258,10 @@ class SonarsIO:
 
 
 class SonarsFilter:
+    sonar_keys = ['front', 'left', 'back', 'right']
+
     def __init__(self):
-        sonar_keys = ['front', 'left', 'back', 'right']
-        self.filters = [Filter(name) for name in sonar_keys]
+        self.filters = [Filter(name) for name in SonarsFilter.sonar_keys]
 
     def add_measures(self, measures):
         n = min(len(measures), len(self.filters))

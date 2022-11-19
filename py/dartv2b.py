@@ -15,13 +15,16 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         self.turnCount = None
         self.dt = 0.05
 
+        self.calibrationRevCount = 2  # number of revolution to calibrate compass
+
         self.spdMin = 70
         self.nominalSpd = 150
 
-        self.centerToWall = 0.25  # distance in meters to wall to stop
+        self.centerToWall = 0.30  # distance in meters to wall to stop
         self.angularAccuracy = 3  # angular precision in degrees
 
-        self.capRegConst = (self.nominalSpd / 200) * (120 / 90)  # proportional constant for cap regulation
+        self.staCapConst = 1  # proportional constant for turns
+        self.dynCapConst = (self.nominalSpd / 200) * (120 / 90)  # proportional constant for cap regulation
         self.obsRegConst = 500  # proportional constant for forward speed regulation
 
         self.sonars.init_4_sonars()  # initialize cardinals sonars in synchronous mode
@@ -32,9 +35,7 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         -> fast calibration is apply : transforming an ellipse into a circle
         """
 
-        revolution_count = 1  # number of revolution to do
-        eps = (1 / 60) * pix2  # 1/60
-
+        eps = (1 / 60) * pix2  # 1/60 of revolution accuracy
         k = 0  # count the number of changes encounter
         near = True  # tell if this robot is near it's initial heading
 
@@ -44,7 +45,7 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         mag_xs, mag_ys = [], []
         self.set_speed(-self.spdMin, self.spdMin)  # turn at minimum speed
 
-        while k < 2 * revolution_count:
+        while k < 2 * self.calibrationRevCount:
             mag_x, mag_y, _ = self.imu.read_mag_raw()
             mag_xs.append(mag_x)
             mag_ys.append(mag_y)
@@ -85,10 +86,11 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
 
             dist_front, = self.get_some_sonars(['front'])
             dist_center = dist_front - self.centerToWall
+            # print('FRONT', dist_front)
 
             current_angle = self.imu.heading_deg()
             delta = normalize_angle(current_angle - direction)
-            delta_spd = self.capRegConst * delta
+            delta_spd = self.dynCapConst * delta
 
             if dist_front <= self.centerToWall and t0 - t_init > min_duration:
                 stage_in_progress = False
@@ -119,7 +121,6 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
             return sign_and_norm(delta)
 
         stage_in_progress = True
-        k = 1
 
         while stage_in_progress:
             t0 = time.time()
@@ -128,7 +129,7 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
             if n < self.angularAccuracy:
                 stage_in_progress = False
             else:
-                spd = s * (self.spdMin + n * k)
+                spd = s * (self.spdMin + n * self.staCapConst)
                 self.set_speed(-spd, spd)
 
                 delta_time = time.time() - t0
@@ -155,6 +156,7 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
 
         # Distances are given in meters
         dist_left, dist_right = self.get_some_sonars(['left', 'right'])
+        # print("LEFT RIGHT", dist_left, dist_right)
 
         if dist_left < 99.9 and dist_right < 99.9:
             if dist_left < dist_right:
@@ -173,12 +175,14 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         Return sonars values of the given sonar names
         """
 
-        name2index = {'front': 0, 'left': 1, 'back': 2, 'right': 3}
         self.update_cardinal_sonars()
         distances = self.flt.median_filter()
+        sonar_keys = SonarsFilter.sonar_keys
 
         if names:
-            return [distances[name2index[name]] for name in names]
+            return [distance
+                    for (distance, key) in zip(distances, sonar_keys)
+                    if key in names]
         else:
             return distances
 
