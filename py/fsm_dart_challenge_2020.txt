@@ -1,16 +1,19 @@
 ----- States
 Idle
-Forward
+ForwardWalls
+ForwardCap
 TurnLeft
 TurnRight
 End
 ----- Transitions
 Idle Idle stay doWait
-Idle Forward continue doForward
-Forward TurnLeft left doTurnLeft
-Forward TurnRight right doTurnRight
-TurnLeft Forward continue doForward
-TurnRight Forward continue doForward
+Idle ForwardWalls continue doForwardWalls
+ForwardWalls TurnLeft left doTurnLeft
+ForwardWalls TurnRight right doTurnRight
+TurnLeft ForwardCap continue doForwardCap
+TurnRight ForwardCap continue doForwardCap
+ForwardCap TurnLeft left doTurnLeft
+ForwardCap TurnRight right doTurnRight
 TurnLeft End stop doStop
 TurnRight End stop doStop
 ----- Events
