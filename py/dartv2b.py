@@ -19,31 +19,43 @@ class DartV2(DartV2Basis):
         self.calibrationRevCount = 1  # number of revolution to calibrate compass
         self.minStageDuration = 1  # minimum amount of time (in seconds) before leaving
 
-        self.spdMin = 70  # minimum wheels speed
-        self.followCapSpd = 150  # wheels speed for follow_cap
-        self.followWallsSpd = 75  # wheels speed for follow_walls
+        self.spdMin = 60  # minimum wheels speed
+        self.followCapSpd = 70  # wheels speed for follow_cap
+        self.followWallsSpd = 70  # wheels speed for follow_walls
 
-        self.stopDistance = 0.30  # distance in meters to wall to stop
+        self.stopDistance = 0.35  # distance in meters to wall to stop
         self.centerToWall = 0.25  # distance to keep away from walls
-        self.angularAccuracy = 3  # angular precision in degrees
+        self.angularAccuracy = 2  # angular precision in degrees
 
-        self.staCapConst = 1  # proportional constant for turns
-        self.dynCapConst = (self.followCapSpd / 200) * (120 / 90)  # proportional constant for cap regulation
+        self.staCapConst = 0.3  # proportional constant for turns
+        self.dynCapConst = self.followCapSpd * (2 / 90)  # proportional constant for cap regulation
 
-        self.obsRegConst = 500  # proportional constant for forward speed regulation
+        self.obsRegConst = 10  # proportional constant for forward speed regulation
 
-        self.followWallsP = 75  # proportional constant for follow walls regulation
-        self.followWallsD = 500 / self.dt  # derivative constant for follow walls regulation
+        self.followWallsP = 40  # proportional constant for follow walls regulation
+        self.followWallsD = 100 / self.dt  # derivative constant for follow walls regulation
 
-        self.westHeadingDeg = None  # estimate of west heading in degrees
+        self.refHeadingDeg = None  # estimate of west heading in degrees
 
         self.sonars.init_4_sonars()  # initialize cardinals sonars in synchronous mode
+
+    def fast_compass_calibration(self):
+        """
+        Hard code compass calibration from an other program
+        """
+
+        print("Compass calibration...")
+
+        mag_x_min, mag_x_max, mag_y_min, mag_y_max = -1238, 2447, -4757, -1242
+        self.imu.fast_heading_calibration(mag_x_min, mag_x_max, mag_y_min, mag_y_max)
 
     def calibration_compass(self):
         """
         Calibrate the compass of this DartV2
         -> fast calibration is apply : transforming an ellipse into a circle
         """
+
+        print("Compass calibration...")
 
         eps = (1 / 42) * pix2  # 1/42 of revolution accuracy
         k = 0  # count the number of changes encounter
@@ -80,11 +92,11 @@ class DartV2(DartV2Basis):
         the compass until an obstacle is encountered
         """
 
-        print("Go forward, following a cap, until an obstacle is encounter.")
-
         t_init = time.time()
         spd_ask = self.followCapSpd
         direction = self.get_direction()  # cap to follow
+
+        print("Go forward, toward %f, until an obstacle is encounter." % direction)
 
         stage_in_progress = True
         self.set_speed(spd_ask, spd_ask)
@@ -96,8 +108,9 @@ class DartV2(DartV2Basis):
             dist_center = dist_front - self.stopDistance
             # print('FRONT', dist_front)
 
-            current_angle = self.imu.heading_deg()
-            delta = normalize_angle(current_angle - direction)
+            current_heading = self.imu.heading_deg()
+            print("CURRENT HEADING", current_heading)
+            delta = normalize_angle(current_heading - direction)
             delta_spd = self.dynCapConst * delta
 
             if dist_front <= self.stopDistance and t0 - t_init > self.minStageDuration:
@@ -164,8 +177,9 @@ class DartV2(DartV2Basis):
                     # print("Time left: ", sleep_time)
                     time.sleep(sleep_time)
 
-        self.westHeadingDeg = np.median(headings)
-        print('WEST: ', self.westHeadingDeg)
+        if self.refHeadingDeg is None:
+            self.refHeadingDeg = np.median(headings)
+
         self.stop()
 
     def turn_compass(self, cap):
@@ -192,7 +206,7 @@ class DartV2(DartV2Basis):
                 stage_in_progress = False
             else:
                 spd = s * (self.spdMin + n * self.staCapConst)
-                self.set_speed(-spd, spd)
+                self.set_speed(spd, -spd)
 
                 delta_time = time.time() - t0
                 sleep_time = self.dt - delta_time
@@ -204,11 +218,11 @@ class DartV2(DartV2Basis):
 
     def turn_left(self):
         direction = self.get_direction()
-        self.turn_compass(direction - 90)
+        self.turn_compass(direction + 90)
 
     def turn_right(self):
         direction = self.get_direction()
-        self.turn_compass(direction + 90)
+        self.turn_compass(direction - 90)
 
     def get_direction(self):
         """
@@ -216,7 +230,8 @@ class DartV2(DartV2Basis):
         """
 
         heading = self.imu.heading_deg()
-        return self.westHeadingDeg + round_direction(heading - self.westHeadingDeg)
+        print("HEADING", heading)
+        return self.refHeadingDeg + round_direction(heading - self.refHeadingDeg)
 
     def get_free_turn(self):
         """
@@ -246,7 +261,7 @@ class DartV2(DartV2Basis):
         """
 
         self.update_cardinal_sonars()
-        distances = self.flt.median_filter()
+        distances = self.flt.centered_mean()
         sonar_keys = SonarsFilter.sonar_keys
 
         if names:

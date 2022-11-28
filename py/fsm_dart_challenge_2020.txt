@@ -10,10 +10,8 @@ Idle Idle stay doWait
 Idle ForwardWalls continue doForwardWalls
 ForwardWalls TurnLeft left doTurnLeft
 ForwardWalls TurnRight right doTurnRight
-TurnLeft ForwardCap continue doForwardCap
-TurnRight ForwardCap continue doForwardCap
-ForwardCap TurnLeft left doTurnLeft
-ForwardCap TurnRight right doTurnRight
+TurnLeft ForwardWalls continue doForwardWalls
+TurnRight ForwardWalls continue doForwardWalls
 TurnLeft End stop doStop
 TurnRight End stop doStop
 ----- Events

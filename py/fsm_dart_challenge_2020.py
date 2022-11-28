@@ -1,14 +1,11 @@
 from fsm import Fsm
 from dartv2b import DartV2
 
-# TODO : calibrate compass offset with a follow wall at the start
-# Add derivative component to follow walls regulation
-
 
 # functions (actions of the fsm)
 def doWait():
     print(">>>>>> action")
-    my_bot.calibration_compass()
+    my_bot.fast_compass_calibration()
 
     return 'continue'
 
