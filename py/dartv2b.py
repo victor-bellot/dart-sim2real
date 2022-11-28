@@ -1,11 +1,12 @@
+from drivers.dartv2b_basis import DartV2Basis
 from drivers.sonars import SonarsFilter
-import drivers.dartv2b_basis
 from tools import *
-import sys
+import numpy as np
 import time
+import sys
 
 
-class DartV2(drivers.dartv2b_basis.DartV2Basis):
+class DartV2(DartV2Basis):
     def __init__(self):
         # get init from parent class
         # drivers.dartv2b_basis.DartV2Basis.__init__(self)
@@ -15,19 +16,38 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         self.turnCount = None
         self.dt = 0.05
 
-        self.calibrationRevCount = 2  # number of revolution to calibrate compass
+        self.calibrationRevCount = 1  # number of revolution to calibrate compass
+        self.minStageDuration = 1  # minimum amount of time (in seconds) before leaving
 
-        self.spdMin = 70
-        self.nominalSpd = 150
+        self.spdMin = 60  # minimum wheels speed
+        self.followCapSpd = 70  # wheels speed for follow_cap
+        self.followWallsSpd = 70  # wheels speed for follow_walls
 
-        self.centerToWall = 0.30  # distance in meters to wall to stop
-        self.angularAccuracy = 3  # angular precision in degrees
+        self.stopDistance = 0.35  # distance in meters to wall to stop
+        self.centerToWall = 0.25  # distance to keep away from walls
+        self.angularAccuracy = 2  # angular precision in degrees
 
-        self.staCapConst = 1  # proportional constant for turns
-        self.dynCapConst = (self.nominalSpd / 200) * (120 / 90)  # proportional constant for cap regulation
-        self.obsRegConst = 500  # proportional constant for forward speed regulation
+        self.staCapConst = 0.3  # proportional constant for turns
+        self.dynCapConst = self.followCapSpd * (2 / 90)  # proportional constant for cap regulation
+
+        self.obsRegConst = 10  # proportional constant for forward speed regulation
+
+        self.followWallsP = 40  # proportional constant for follow walls regulation
+        self.followWallsD = 100 / self.dt  # derivative constant for follow walls regulation
+
+        self.refHeadingDeg = None  # estimate of west heading in degrees
 
         self.sonars.init_4_sonars()  # initialize cardinals sonars in synchronous mode
+
+    def fast_compass_calibration(self):
+        """
+        Hard code compass calibration from an other program
+        """
+
+        print("Compass calibration...")
+
+        mag_x_min, mag_x_max, mag_y_min, mag_y_max = -1238, 2447, -4757, -1242
+        self.imu.fast_heading_calibration(mag_x_min, mag_x_max, mag_y_min, mag_y_max)
 
     def calibration_compass(self):
         """
@@ -35,7 +55,9 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         -> fast calibration is apply : transforming an ellipse into a circle
         """
 
-        eps = (1 / 60) * pix2  # 1/60 of revolution accuracy
+        print("Compass calibration...")
+
+        eps = (1 / 42) * pix2  # 1/42 of revolution accuracy
         k = 0  # count the number of changes encounter
         near = True  # tell if this robot is near it's initial heading
 
@@ -70,13 +92,11 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         the compass until an obstacle is encountered
         """
 
-        print("Go forward, following a cap, until an obstacle is encounter.")
-
         t_init = time.time()
-        spd_ask = self.nominalSpd  # nominal speed
+        spd_ask = self.followCapSpd
+        direction = self.get_direction()  # cap to follow
 
-        min_duration = 1  # minimum amount of time before leaving
-        direction = round_direction(self.imu.heading_deg())
+        print("Go forward, toward %f, until an obstacle is encounter." % direction)
 
         stage_in_progress = True
         self.set_speed(spd_ask, spd_ask)
@@ -85,14 +105,15 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
             t0 = time.time()
 
             dist_front, = self.get_some_sonars(['front'])
-            dist_center = dist_front - self.centerToWall
+            dist_center = dist_front - self.stopDistance
             # print('FRONT', dist_front)
 
-            current_angle = self.imu.heading_deg()
-            delta = normalize_angle(current_angle - direction)
+            current_heading = self.imu.heading_deg()
+            print("CURRENT HEADING", current_heading)
+            delta = normalize_angle(current_heading - direction)
             delta_spd = self.dynCapConst * delta
 
-            if dist_front <= self.centerToWall and t0 - t_init > min_duration:
+            if dist_front <= self.stopDistance and t0 - t_init > self.minStageDuration:
                 stage_in_progress = False
             else:
                 spd = max(min(spd_ask, self.obsRegConst * dist_center), self.spdMin)
@@ -103,6 +124,61 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
                 if sleep_time > 0:
                     # print("Time left: ", sleep_time)
                     time.sleep(sleep_time)
+
+        self.stop()
+
+    def follow_walls(self):
+        """
+        Follow walls until an obstacle is encountered
+        """
+
+        print("Go forward, following walls, until an obstacle is encounter.")
+
+        t_init = time.time()
+        spd_ask = self.followWallsSpd
+        delta_dist_old = 0
+        headings = []
+
+        stage_in_progress = True
+        self.set_speed(spd_ask, spd_ask)
+
+        while stage_in_progress:
+            t0 = time.time()
+
+            dist_left, dist_front, dist_right = self.get_some_sonars(['left', 'front', 'right'])
+            dist_center = dist_front - self.centerToWall
+            # print('LEFT FRONT RIGHT', dist_left, dist_front, dist_right)
+
+            headings.append(self.imu.heading_deg())
+
+            if dist_front <= self.stopDistance and t0 - t_init > self.minStageDuration:
+                stage_in_progress = False
+            else:
+                spd = max(min(spd_ask, self.obsRegConst * dist_center), self.spdMin)
+
+                far_left = dist_left > 2 * self.centerToWall
+                far_right = dist_right > 2 * self.centerToWall
+                if far_left and far_right:
+                    delta_dist = 0
+                elif far_left:
+                    delta_dist = self.centerToWall - dist_right
+                elif far_right:
+                    delta_dist = dist_left - self.centerToWall
+                else:
+                    delta_dist = (dist_left - dist_right) / 2
+
+                delta_spd = self.followWallsP * delta_dist + self.followWallsD * (delta_dist - delta_dist_old)
+                delta_dist_old = delta_dist
+                self.set_speed(spd - delta_spd, spd + delta_spd)
+
+                delta_time = time.time() - t0
+                sleep_time = self.dt - delta_time
+                if sleep_time > 0:
+                    # print("Time left: ", sleep_time)
+                    time.sleep(sleep_time)
+
+        if self.refHeadingDeg is None:
+            self.refHeadingDeg = np.median(headings)
 
         self.stop()
 
@@ -130,7 +206,7 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
                 stage_in_progress = False
             else:
                 spd = s * (self.spdMin + n * self.staCapConst)
-                self.set_speed(-spd, spd)
+                self.set_speed(spd, -spd)
 
                 delta_time = time.time() - t0
                 sleep_time = self.dt - delta_time
@@ -141,16 +217,25 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         self.stop()
 
     def turn_left(self):
-        direction = round_direction(self.imu.heading_deg())
-        self.turn_compass(direction - 90)
-
-    def turn_right(self):
-        direction = round_direction(self.imu.heading_deg())
+        direction = self.get_direction()
         self.turn_compass(direction + 90)
 
-    def get_free_direction(self):
+    def turn_right(self):
+        direction = self.get_direction()
+        self.turn_compass(direction - 90)
+
+    def get_direction(self):
         """
-        Return the orientation of the free direction
+        Return the estimate of the nearest cardinal heading
+        """
+
+        heading = self.imu.heading_deg()
+        print("HEADING", heading)
+        return self.refHeadingDeg + round_direction(heading - self.refHeadingDeg)
+
+    def get_free_turn(self):
+        """
+        Return the turn to do to go toward the free direction
         -> which way to go
         """
 
@@ -176,13 +261,11 @@ class DartV2(drivers.dartv2b_basis.DartV2Basis):
         """
 
         self.update_cardinal_sonars()
-        distances = self.flt.median_filter()
+        distances = self.flt.centered_mean()
         sonar_keys = SonarsFilter.sonar_keys
 
         if names:
-            return [distance
-                    for (distance, key) in zip(distances, sonar_keys)
-                    if key in names]
+            return [distances[sonar_keys.index(name)] for name in names]
         else:
             return distances
 

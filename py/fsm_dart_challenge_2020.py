@@ -1,4 +1,3 @@
-import time
 from fsm import Fsm
 from dartv2b import DartV2
 
@@ -6,18 +5,18 @@ from dartv2b import DartV2
 # functions (actions of the fsm)
 def doWait():
     print(">>>>>> action")
-    my_bot.calibration_compass()
+    my_bot.fast_compass_calibration()
 
     return 'continue'
 
 
-def doForward():
+def doForwardWalls():
     print(">>>>>> action")
-    my_bot.go_straight_to_obs_compass()
+    my_bot.follow_walls()
 
     event = None
     while event is None:
-        event = my_bot.get_free_direction()
+        event = my_bot.get_free_turn()
 
     return event
 
@@ -44,6 +43,17 @@ def doTurnRight():
         event = 'stop'
     else:
         event = 'continue'
+
+    return event
+
+
+def doForwardCap():
+    print(">>>>>> action")
+    my_bot.go_straight_to_obs_compass()
+
+    event = None
+    while event is None:
+        event = my_bot.get_free_turn()
 
     return event
 

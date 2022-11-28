@@ -20,6 +20,7 @@ def round_direction(angle):
 
 
 def normalize_angle(angle):
+    """ Normalize between -180° and +180° """
     angle = angle % 360  # between 0° and 360°
     if angle > 180:
         return angle - 360
