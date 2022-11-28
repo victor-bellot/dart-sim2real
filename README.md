@@ -53,22 +53,17 @@ En cours
 Scéance 1 à scéance 4
 Lors de ces scéances nous nous sommes orientés vers la compréhension du fonctionnement des différents drivers, afin de pouvoir les utilisés au cours du projet.
 <<<<<<< HEAD
-#### Partie 2 Implémentation des différentes fonction pour le projet
-Scéance 5 à scéance X  
-Nous avons créer une classe DartV2 ou nous avons ajouté de nombreuses fonctions pour le controle du dart.  
-Nous avons créer des fsm pour
-Implémentation de la boussolle
-=======
-#### Partie 2 Utilisation de fonctions simple du projet
+#### Partie 2 Utilisation des fonctions du projet pour accomplir le parcour V-REP
+Scéance 5 à scéance 6  
+
 Nous avons crée un final state machine (FSM) pour challenge dart 2020 dont le graphe est représenté ci-dessous
 ![FSM_challenge_dart_2020](/uploads/6f07edb4bc6e7c8d6bdf8af6d3c9e016/FSM_challenge_dart_2020_V1.JPG)
 Plus précisément nous avons un conteur que nous initialison à 12 dans init et à chaque rotation il diminue de 1. Quand il arrive à 0 Turn fait la commande stop
 Un capteur avant qui mesure une distance permet de déterminer quand le dart passe de forward a turn, lorsque que le capteur perçoit une distance inférieur à une distance fixé. Nous utilisons un filtre pour supprimer les valeurs aberrantes. Les capteurs sur les cotés vont permettre de savoir si le dart tourne left or right. Après l'application du même type de filtre que le filtre avant, si le capteur ne retourne rien alors c'est qu'il n'y a pas de mur et qu'il faut tourner dans cette direction.  
 
 Pour l'asservissement nous utilisons la boussole pour un suivi de cap et avoir des rotations précises. Nous faisons donc une callibration afin d'initialisé la boussole.
->>>>>>> 1d8964fcb8d765d1333f3d12837a57ced5731cdf
 
-#### Partie 3  de fonctions simple du projet
+#### Partie 3 Utilisation des fonctions du projet pour accomplir le parcour réel
 
 ### Journal de bord
 
@@ -94,29 +89,17 @@ Pour l'asservissement nous utilisons la boussole pour un suivi de cap et avoir d
     * Nous avons fini les question 8 et 9.
     * Compréhension de la FSM (Finite State Machine)
     * Création d'une classe robot regroupant toute les fonctions nécessaire au fonctionement du DART
-<<<<<<< HEAD
-    * Ecriture du README.   
-.    
-=======
-    * Ecriture du README   
+    * Ecriture du README
 .
->>>>>>> 1d8964fcb8d765d1333f3d12837a57ced5731cdf
 * Entre Séances:
     * Création du fsm_b&f.py et du txt associé
     * Création du fsm_dart_challenge_2020.py et du txt associé
     * Modification du fsm_full_turn.py
-<<<<<<< HEAD
     * Modification de la classe dartv2b 
-=======
-    * Modification de la classe dartv2b  
->>>>>>> 1d8964fcb8d765d1333f3d12837a57ced5731cdf
 .              
 * Scéance 5:
     * Ecriture des méthodes de dartv2b
     * Rajout d'une boussole pour le dartv2 afin d'avoir des rotations précises 
-<<<<<<< HEAD
-.
-=======
     * Rajout d'une phase callibration de la boussole
     * Ecriture du README   
 .
@@ -126,8 +109,12 @@ Pour l'asservissement nous utilisons la boussole pour un suivi de cap et avoir d
 * Séance 6:
     * Rajout d'un filtre sur les capteurs 
     * Ecriture du README   
-.          
->>>>>>> 1d8964fcb8d765d1333f3d12837a57ced5731cdf
+.        
+* Séance 7:
+    * Création d'une fonction callibration rapide pour la boussole
+    * De-bugage 
+    * Rajout d'un ajustement avec les murs 
+
 ### Travail en cours
 
 Actuellement sur la modification de la class DartV2
