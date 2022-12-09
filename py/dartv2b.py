@@ -23,16 +23,16 @@ class DartV2(DartV2Basis):
         self.followCapSpd = 70  # wheels speed for follow_cap
         self.followWallsSpd = 70  # wheels speed for follow_walls
 
-        self.stopDistance = 0.35  # distance in meters to wall to stop
+        self.stopDistance = 0.47  # distance in meters to wall to stop
         self.centerToWall = 0.25  # distance to keep away from walls
         self.angularAccuracy = 2  # angular precision in degrees
 
         self.staCapConst = 0.3  # proportional constant for turns
         self.dynCapConst = self.followCapSpd * (2 / 90)  # proportional constant for cap regulation
 
-        self.obsRegConst = 10  # proportional constant for forward speed regulation
+        self.obsRegConst = 20  # proportional constant for forward speed regulation
 
-        self.followWallsP = 40  # proportional constant for follow walls regulation
+        self.followWallsP = 70  # proportional constant for follow walls regulation
         self.followWallsD = 100 / self.dt  # derivative constant for follow walls regulation
 
         self.refHeadingDeg = None  # estimate of west heading in degrees
