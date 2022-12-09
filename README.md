@@ -115,10 +115,14 @@ Pour l'asservissement nous utilisons la boussole pour un suivi de cap et avoir d
     * De-bugage 
     * Rajout d'un ajustement avec les murs 
 
+* Séance 8:
+    * Callibration des différentes constante du DartV2
 ### Travail en cours
 
-Actuellement sur la modification de la class DartV2
+Actuellement sur la modification des constantes du DartV2
 
 
 ## Guide d'utilisation
-=> Préciser comment utiliser vos codes et la mission qu'ils permettent de remplir (rotation d'un anngle alpha, avancer de Xcm, ...) (Vous êtes libre sur la forme et le contenu)
+-LANCER fast_heading_calibration.py à l'extérieur  du parcour
+-METTRE le robot sur la zone de départ
+-LANCER fsm_dart_challenge_2020.py 
