@@ -18,24 +18,26 @@ class DartV2(DartV2Basis):
 
         self.calibrationRevCount = 1  # number of revolution to calibrate compass
         self.minStageDuration = 1  # minimum amount of time (in seconds) before leaving
+        self.longStageDuration = 4  # minimum amount of time (in seconds) to be in long corridors
 
         self.spdMin = 60  # minimum wheels speed
         self.followCapSpd = 70  # wheels speed for follow_cap
         self.followWallsSpd = 70  # wheels speed for follow_walls
 
-        self.stopDistance = 0.47  # distance in meters to wall to stop
+        self.stopDistance = 0.42  # distance in meters to wall to stop
         self.centerToWall = 0.25  # distance to keep away from walls
-        self.angularAccuracy = 2  # angular precision in degrees
+        self.angularAccuracy = 3  # angular precision in degrees
 
         self.staCapConst = 0.3  # proportional constant for turns
         self.dynCapConst = self.followCapSpd * (2 / 90)  # proportional constant for cap regulation
 
-        self.obsRegConst = 20  # proportional constant for forward speed regulation
+        self.obsRegConst = 10  # proportional constant for forward speed regulation
 
-        self.followWallsP = 70  # proportional constant for follow walls regulation
+        self.followWallsP = 50  # proportional constant for follow walls regulation
         self.followWallsD = 100 / self.dt  # derivative constant for follow walls regulation
 
         self.refHeadingDeg = None  # estimate of west heading in degrees
+        self.halfRaceCount = 0  # number of half race already done
 
         self.sonars.init_4_sonars()  # initialize cardinals sonars in synchronous mode
 
@@ -46,7 +48,8 @@ class DartV2(DartV2Basis):
 
         print("Fast compass calibration...")
 
-        mag_x_min, mag_x_max, mag_y_min, mag_y_max = -1238, 2447, -4757, -1242
+        # mag_x_min, mag_x_max, mag_y_min, mag_y_max = -1238, 2447, -4757, -1242
+        mag_x_min, mag_x_max, mag_y_min, mag_y_max = -1202, 2347, -4598, -1245
         self.imu.fast_heading_calibration(mag_x_min, mag_x_max, mag_y_min, mag_y_max)
 
     def follow_walls(self):
@@ -99,9 +102,10 @@ class DartV2(DartV2Basis):
                     # print("Time left: ", sleep_time)
                     time.sleep(sleep_time)
 
-        # TO ADD : take into account second long corridor
-        if self.refHeadingDeg is None:
-            self.refHeadingDeg = np.median(headings)
+        mission_duration = time.time() - t_init
+        if mission_duration > self.longStageDuration:
+            self.refHeadingDeg = (np.median(headings) + self.halfRaceCount * 180) % 360
+            self.halfRaceCount += 1
 
         self.stop()
 
@@ -184,7 +188,7 @@ class DartV2(DartV2Basis):
         """
 
         self.update_cardinal_sonars()
-        distances = self.flt.centered_mean()
+        distances = self.flt.median_filter()
         sonar_keys = SonarsFilter.sonar_keys
 
         if names:

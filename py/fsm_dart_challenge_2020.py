@@ -61,8 +61,9 @@ def doStop():
 
 
 if __name__ == "__main__":
+    simulation = True
     try:
-        simulation = bool(sys.argv[1])
+        print("You enter:", sys.argv[1])
     except:
         simulation = False
 
