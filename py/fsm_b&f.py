@@ -1,6 +1,6 @@
 import time
 from fsm import Fsm
-from dartv2b import DartV2
+from dartv2b_real import DartV2
 
 
 # functions (actions of the fsm)

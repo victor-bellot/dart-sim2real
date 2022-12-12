@@ -1,4 +1,4 @@
-import dartv2b
+import dartv2b_real
 import getkey
 import time
 
@@ -32,7 +32,7 @@ def turnright():
 
 
 if __name__ == "__main__":
-    mybot = dartv2b.DartV2()
+    mybot = dartv2b_real.DartV2()
     getkey = getkey.GetKey()
     mybot.sonars.init_4_sonars(dmax=1.5, mode="sync")
 

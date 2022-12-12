@@ -1,9 +1,9 @@
-import dartv2b
+import dartv2b_real
 import time
 import sys
 
 if __name__ == "__main__":
-    mybot = dartv2b.DartV2()
+    mybot = dartv2b_real.DartV2()
 
     # speed difference to get same count on left and right odo
     spdl = 0

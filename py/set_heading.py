@@ -1,4 +1,4 @@
-import dartv2b
+import dartv2b_real
 import time
 import sys
 import math
@@ -15,7 +15,7 @@ def delta_heading(head_ref, head):
 
 
 if __name__ == "__main__":
-    mybot = dartv2b.DartV2()
+    mybot = dartv2b_real.DartV2()
 
     head0 = 90.0
     try:
