@@ -1,8 +1,8 @@
-import dartv2b_real
+import dartv2b_simu
 import time
 
 if __name__ == "__main__":
-    my_bot = dartv2b_real.DartV2()
+    my_bot = dartv2b_simu.DartV2()
 
     # place your work here
     print("Sonar Microcode Version : ", my_bot.sonars.get_version())
