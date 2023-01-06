@@ -130,9 +130,11 @@ Actuellement sur la modification des constantes du DartV2
 
 
 ## Guide d'utilisation
+
+Si il y a un argument en executant pour le programme fsm_dart_challenge_2020, alors celui-ci se lance pour la simulation. Si il n'y a pas d'argument ce programme se lance pour le Dart réel.
+Pour le cas le Dart réel :
 * LANCER fast_heading_calibration.py à l'extérieur  du parcour
 * METTRE le robot sur la zone de départ
 * LANCER fsm_dart_challenge_2020.py 
 
-Si il y a un argument, le programme se lance pour la simulation. Si il n'y a pas d'argument le programme se lance pour le Dart réel
-Pour les constantes pouvant être changé sont écris dans la classe dartv2.
+Les constantes pouvent être changé, ils sont écris dans les classes Dartv2.
