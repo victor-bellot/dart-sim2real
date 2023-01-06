@@ -3,9 +3,9 @@ import time
 
 
 class i2c():
-    def __init__(self, addr, bus_nb=2):
-        self.__bus_nb = bus_nb
+    def __init__(self, addr, bus_nb=1):
         self.__addr = addr
+        self.__bus_nb = bus_nb
         self.__bus = smbus.SMBus(self.__bus_nb)
         print("i2c device addr = 0x%x on bus %d" % (addr, bus_nb))
 

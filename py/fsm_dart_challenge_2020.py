@@ -1,18 +1,26 @@
+import sys
 from fsm import Fsm
-from dartv2b import DartV2
 
 
 # functions (actions of the fsm)
 def doWait():
     print(">>>>>> action")
-    my_bot.fast_compass_calibration()
+
+    if simulation:
+        my_bot.calibration_compass()
+    else:
+        my_bot.fast_compass_calibration()
 
     return 'continue'
 
 
-def doForwardWalls():
+def doForward():
     print(">>>>>> action")
-    my_bot.follow_walls()
+
+    if simulation:
+        my_bot.go_straight_to_obs_compass()
+    else:
+        my_bot.follow_walls()
 
     event = None
     while event is None:
@@ -47,25 +55,27 @@ def doTurnRight():
     return event
 
 
-def doForwardCap():
-    print(">>>>>> action")
-    my_bot.go_straight_to_obs_compass()
-
-    event = None
-    while event is None:
-        event = my_bot.get_free_turn()
-
-    return event
-
-
 def doStop():
     print(">>>>>> action")
     return
 
 
 if __name__ == "__main__":
+    simulation = True
+    try:
+        print("You enter:", sys.argv[1])
+    except:
+        simulation = False
+
+    print("Start FSM with simulation:", simulation)
+
     f = Fsm()  # finite state machine
     f.load_fsm_from_file("fsm_dart_challenge_2020.txt")
+
+    if simulation:
+        from dartv2b_simu import DartV2
+    else:
+        from dartv2b_real import DartV2
 
     # create a robot (to be replaced by dartv2)
     my_bot = DartV2()

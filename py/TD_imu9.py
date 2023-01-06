@@ -1,4 +1,4 @@
-from dartv2b import DartV2
+from dartv2b_simu import DartV2
 
 if __name__ == "__main__":
     my_bot = DartV2()
