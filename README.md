@@ -7,6 +7,11 @@
 ## Description
 Avec ce projet, nous découvrons la collaboration avec GitLab ainsi que l'utilisation de la librairie Python DARTv2.
 Nous allons ensuite expérimenter le passage de la commande d'un robot dans une simulation à celle dans un circuit réel.
+Nous pouvons voir le robot Dart avec notre programme en action avec le liens :
+*https://www.ensta-bretagne.fr/zerr/filerepo/dartv2/video-2022-2023/eval-20221212/ 
+la video : 
+* cam94-grp11-2022-12-..>	2022-12-15 08:47 	14M	 
+
 
 ## Sommaire
 1. [Structure](#structure-du-git)
@@ -45,14 +50,13 @@ README décrivant le projet GitLab
 ## Informations Générales
 ### Etat du projet
 
-En cours
+En Cours
 
 ### Travail effectué
 
 #### Partie 1 Découverte du projet et des fonctions proposé 
 Scéance 1 à scéance 4
 Lors de ces scéances nous nous sommes orientés vers la compréhension du fonctionnement des différents drivers, afin de pouvoir les utilisés au cours du projet.
-<<<<<<< HEAD
 #### Partie 2 Utilisation des fonctions du projet pour accomplir le parcour V-REP
 Scéance 5 à scéance 6  
 
@@ -117,12 +121,18 @@ Pour l'asservissement nous utilisons la boussole pour un suivi de cap et avoir d
 
 * Séance 8:
     * Callibration des différentes constante du DartV2
+
+* Séance 9-10-11:
+    * Finition des constantes
+.
 ### Travail en cours
 
 Actuellement sur la modification des constantes du DartV2
 
 
 ## Guide d'utilisation
--LANCER fast_heading_calibration.py à l'extérieur  du parcour
--METTRE le robot sur la zone de départ
--LANCER fsm_dart_challenge_2020.py 
+* LANCER fast_heading_calibration.py à l'extérieur  du parcour
+* METTRE le robot sur la zone de départ
+* LANCER fsm_dart_challenge_2020.py 
+
+Pour les constantes pouvant être changé sont écris dans la classe dartv2.
