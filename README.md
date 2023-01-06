@@ -8,8 +8,7 @@
 Avec ce projet, nous découvrons la collaboration avec GitLab ainsi que l'utilisation de la librairie Python DARTv2.
 Nous allons ensuite expérimenter le passage de la commande d'un robot dans une simulation à celle dans un circuit réel.
 Nous pouvons voir le robot Dart avec notre programme en action avec le liens :
-* https://www.ensta-bretagne.fr/zerr/filerepo/dartv2/video-2022-2023/eval-20221212/ 
-la video : 
+*https://www.ensta-bretagne.fr/zerr/filerepo/dartv2/video-2022-2023/eval-20221212/ 
 * cam94-grp11-2022-12-..>	2022-12-15 08:47 	14M	 
 
 
@@ -135,4 +134,5 @@ Actuellement sur la modification des constantes du DartV2
 * METTRE le robot sur la zone de départ
 * LANCER fsm_dart_challenge_2020.py 
 
+Si il y a un argument, le programme se lance pour la simulation. Si il n'y a pas d'argument le programme se lance pour le Dart réel
 Pour les constantes pouvant être changé sont écris dans la classe dartv2.
