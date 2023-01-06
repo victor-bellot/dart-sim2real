@@ -49,7 +49,7 @@ README décrivant le projet GitLab
 ## Informations Générales
 ### Etat du projet
 
-En Cours
+Fini
 
 ### Travail effectué
 
