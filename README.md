@@ -7,7 +7,7 @@
 ## Description
 Avec ce projet, nous découvrons la collaboration avec GitLab ainsi que l'utilisation de la librairie Python DARTv2.
 Nous allons ensuite expérimenter le passage de la commande d'un robot dans une simulation à celle dans un circuit réel.
-Nous pouvons voir le robot Dart avec notre programme en action avec le liens :
+Nous pouvons voir le robot Dart avec notre programme en action avec le lien :
 * https://www.ensta-bretagne.fr/zerr/filerepo/dartv2/video-2022-2023/eval-20221212/ 
 * cam94-grp11-2022-12-..>	2022-12-15 08:47 	14M	 
 
@@ -60,7 +60,7 @@ Lors de ces scéances nous nous sommes orientés vers la compréhension du fonct
 Scéance 5 à scéance 6  
 
 Nous avons crée un final state machine (FSM) pour challenge dart 2020 dont le graphe est représenté ci-dessous
-![FSM_challenge_dart_2020](/uploads/6f07edb4bc6e7c8d6bdf8af6d3c9e016/FSM_challenge_dart_2020_V1.JPG)
+![FSM_challenge_dart_2020](image/FSM_challenge_dart_2020_V1.JPG)
 Plus précisément nous avons un conteur que nous initialison à 12 dans init et à chaque rotation il diminue de 1. Quand il arrive à 0 Turn fait la commande stop
 Un capteur avant qui mesure une distance permet de déterminer quand le dart passe de forward a turn, lorsque que le capteur perçoit une distance inférieur à une distance fixé. Nous utilisons un filtre pour supprimer les valeurs aberrantes. Les capteurs sur les cotés vont permettre de savoir si le dart tourne left or right. Après l'application du même type de filtre que le filtre avant, si le capteur ne retourne rien alors c'est qu'il n'y a pas de mur et qu'il faut tourner dans cette direction.  
 
